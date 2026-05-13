@@ -79,3 +79,12 @@ Errores              → { error: "mensaje" } con status apropiado
 - No hardcodear IDs ni secrets — siempre process.env
 - No crear tablas nuevas — el esquema ya está en Supabase
 - No modificar el SQL ya ejecutado — solo agregar lógica en el backend
+
+## Base de datos — esquema completo
+El archivo `docs/database.sql` contiene el esquema completo de PostgreSQL.
+Antes de escribir cualquier query, consultar ese archivo para:
+- Nombres exactos de tablas y columnas
+- Tipos de datos y constraints (NOT NULL, UNIQUE, etc.)
+- ENUMs disponibles y sus valores
+- FKs y relaciones entre tablas
+- Triggers existentes (NO reimplementar su lógica en el backend)
