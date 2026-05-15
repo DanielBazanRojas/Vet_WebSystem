@@ -24,12 +24,22 @@ export const auditLog = (req, res, next) => {
     }
 
     const user_id = req.user?.id || null;
-    const ip = req.ip || req.socket?.remoteAddress;
+    const ip_address = req.ip || req.socket?.remoteAddress;
+    const user_agent = req.headers['user-agent'];
+
+    // Map method to action
+    const actionMap = {
+      'POST': 'CREATE',
+      'PUT': 'UPDATE',
+      'PATCH': 'UPDATE',
+      'DELETE': 'DELETE'
+    };
+    const action = actionMap[method] || 'ACTION';
 
     // Asynchronous insert
     query(
-      'INSERT INTO audit_logs (method, route, entity_type, entity_id, user_id, ip) VALUES ($1, $2, $3, $4, $5, $6)',
-      [method, route, entity_type, entity_id, user_id, ip]
+      'INSERT INTO audit_logs (action, entity_type, entity_id, user_id, ip_address, user_agent, metadata) VALUES ($1, $2, $3, $4, $5, $6, $7)',
+      [action, entity_type, entity_id, user_id, ip_address, user_agent, JSON.stringify({ route })]
     ).catch(err => {
       console.error('Failed to write audit log:', err);
     });

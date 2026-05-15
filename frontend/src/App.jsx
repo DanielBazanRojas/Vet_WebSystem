@@ -8,6 +8,9 @@ import PrivateRoute from './components/PrivateRoute';
 import PanelLayout from './components/PanelLayout';
 import ClientsPage from './modules/clients/ClientsPage';
 import ClientDetail from './modules/clients/ClientDetail';
+import PetsPage from './modules/pets/PetsPage';
+import PetDetail from './modules/pets/PetDetail';
+import AppointmentsPage from './modules/appointments/AppointmentsPage';
 
 const queryClient = new QueryClient();
 
@@ -35,8 +38,9 @@ function App() {
               <Route path="/" element={<div>Bienvenido al sistema. Seleccione un módulo en el menú lateral.</div>} />
               <Route path="/clientes" element={<ClientsPage />} />
               <Route path="/clientes/:id" element={<ClientDetail />} />
-              <Route path="/mascotas" element={<div>Módulo Mascotas</div>} />
-              <Route path="/citas" element={<div>Módulo Citas</div>} />
+              <Route path="/mascotas" element={<PetsPage />} />
+              <Route path="/mascotas/:id" element={<PetDetail />} />
+              <Route path="/citas" element={<AppointmentsPage />} />
               <Route path="/consultas" element={<div>Módulo Consultas</div>} />
               <Route path="/farmacia" element={<div>Módulo Farmacia</div>} />
               <Route path="/estetica" element={<div>Módulo Estética</div>} />
