@@ -16,11 +16,12 @@ const schema = z.object({
   scheduled_time: z.string().min(1, 'La hora es requerida'),
   duration_min: z.number().min(5, 'Duración mínima 5 min').max(480, 'Duración máxima 8 hrs'),
   notes: z.string().optional(),
+  status: z.string().optional(),
 });
 
 export default function AppointmentForm({ initialData, initialDate, initialTime, onSuccess, onCancel }) {
-  const { data: types = [] } = useAppointmentTypes();
-  const { data: staff = [] } = useStaff();
+  const { data: types = [], isLoading: isLoadingTypes } = useAppointmentTypes();
+  const { data: staff = [], isLoading: isLoadingStaff } = useStaff();
 
   const createMutation = useCreateAppointment();
   const updateMutation = useUpdateAppointment();
@@ -36,16 +37,26 @@ export default function AppointmentForm({ initialData, initialDate, initialTime,
     defaultValues: {
       pet_id: initialData?.pet_id || '',
       client_id: initialData?.client_id || '',
-      appointment_type_id: initialData?.appointment_type_id || '',
+      appointment_type_id: initialData?.type_id || initialData?.appointment_type_id || '',
       assigned_to: initialData?.assigned_to_id || '',
       scheduled_date: initialData?.scheduled_date ? initialData.scheduled_date.substring(0, 10) : (initialDate || ''),
       scheduled_time: initialData?.scheduled_time ? initialData.scheduled_time.substring(0, 5) : (initialTime || ''),
       duration_min: initialData?.duration_min || 30,
       notes: initialData?.notes || '',
+      status: initialData?.status || 'pendiente',
     }
   });
 
   const watchTypeId = watch('appointment_type_id');
+
+  if (isLoadingTypes || isLoadingStaff) {
+    return (
+      <div className="flex flex-col items-center justify-center py-12 space-y-2">
+        <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+        <span className="text-sm text-slate-500">Cargando opciones...</span>
+      </div>
+    );
+  }
 
   // Actualizar duración por defecto cuando cambia el tipo
   const handleTypeChange = (e) => {
@@ -155,6 +166,21 @@ export default function AppointmentForm({ initialData, initialDate, initialTime,
           </div>
         </div>
       </div>
+
+      {initialData && (
+        <div>
+          <label className="block text-sm font-medium text-slate-700">Estado de la cita</label>
+          <select {...register('status')} className="w-full mt-1 px-3 py-2 border rounded-md bg-white">
+            <option value="pendiente">Pendiente</option>
+            <option value="pendiente_confirmacion">Pendiente de Confirmación</option>
+            <option value="confirmada">Confirmada</option>
+            <option value="en_atencion">En Atención</option>
+            <option value="atendida">Atendida</option>
+            <option value="cancelada">Cancelada</option>
+            <option value="no_show">No Asistió</option>
+          </select>
+        </div>
+      )}
 
       <div>
         <label className="block text-sm font-medium text-slate-700">Notas / Motivo</label>

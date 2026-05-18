@@ -159,6 +159,7 @@ export default function AppointmentsPage() {
                                 top: '4px', 
                                 height: `calc(${slots * 100}% + ${Math.max(0, slots - 1)}px - 8px)`
                               }}
+                              onClick={(e) => e.stopPropagation()}
                             >
                               <AppointmentCard 
                                 appointment={appt} 

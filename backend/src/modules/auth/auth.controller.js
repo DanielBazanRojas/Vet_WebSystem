@@ -26,7 +26,7 @@ export const login = async (req, res) => {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
-      maxAge: 7 * 24 * 60 * 60 * 1000 // 7 días
+      maxAge: 20 * 60 * 1000 // 20 minutos
     });
 
     res.json({
@@ -49,6 +49,15 @@ export const refresh = async (req, res) => {
     }
 
     const result = await authService.refresh(refreshToken);
+
+    // Extender la cookie en el navegador por otros 20 minutos
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 20 * 60 * 1000 // 20 minutos
+    });
+
     res.json({ accessToken: result.accessToken });
   } catch (error) {
     res.status(401).json({ message: error.message });
