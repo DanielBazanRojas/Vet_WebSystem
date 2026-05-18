@@ -59,7 +59,8 @@ export const login = async (email, password, ip, userAgent) => {
       id: user.id,
       email: user.email,
       full_name: user.full_name,
-      user_type: user.user_type
+      user_type: user.user_type,
+      permissions
     }
   };
 };
@@ -79,6 +80,9 @@ export const refresh = async (refreshToken) => {
   if (!user) {
     throw new Error('Usuario no encontrado');
   }
+
+  // Extender la sesión en la base de datos por otros 20 minutos
+  await query(queries.EXTEND_SESSION, [hash]);
 
   const permissionsResult = await query(queries.GET_USER_PERMISSIONS, [user.id]);
   

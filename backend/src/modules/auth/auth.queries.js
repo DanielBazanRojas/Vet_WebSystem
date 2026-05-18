@@ -32,7 +32,13 @@ export const GET_USER_PERMISSIONS = `
 
 export const INSERT_SESSION = `
   INSERT INTO sessions (user_id, refresh_token_hash, ip_address, user_agent, expires_at)
-  VALUES ($1, $2, $3, $4, now() + interval '7 days')
+  VALUES ($1, $2, $3, $4, now() + interval '20 minutes')
+`;
+
+export const EXTEND_SESSION = `
+  UPDATE sessions 
+  SET expires_at = now() + interval '20 minutes' 
+  WHERE refresh_token_hash = $1 AND revoked_at IS NULL AND expires_at > now()
 `;
 
 export const GET_VALID_SESSION = `
