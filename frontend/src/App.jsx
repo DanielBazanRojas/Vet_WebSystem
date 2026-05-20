@@ -11,6 +11,15 @@ import ClientDetail from './modules/clients/ClientDetail';
 import PetsPage from './modules/pets/PetsPage';
 import PetDetail from './modules/pets/PetDetail';
 import AppointmentsPage from './modules/appointments/AppointmentsPage';
+import ConsultationForm from './modules/consultations/ConsultationForm';
+import ConsultationDetail from './modules/consultations/ConsultationDetail';
+import ConsultationsPage from './modules/consultations/ConsultationsPage';
+import PharmacyPage from './modules/pharmacy/PharmacyPage';
+import GroomingPage from './modules/grooming/GroomingPage';
+import GroomingSessionDetail from './modules/grooming/GroomingSessionDetail';
+import BillingPage from './modules/billing/BillingPage';
+import InvoiceDetail from './modules/billing/InvoiceDetail';
+import DashboardPage from './modules/dashboard/DashboardPage';
 
 const queryClient = new QueryClient();
 
@@ -35,16 +44,20 @@ function App() {
           
           <Route element={<PrivateRoute />}>
             <Route element={<PanelLayout />}>
-              <Route path="/" element={<div>Bienvenido al sistema. Seleccione un módulo en el menú lateral.</div>} />
+              <Route path="/" element={<DashboardPage />} />
               <Route path="/clientes" element={<ClientsPage />} />
               <Route path="/clientes/:id" element={<ClientDetail />} />
               <Route path="/mascotas" element={<PetsPage />} />
               <Route path="/mascotas/:id" element={<PetDetail />} />
               <Route path="/citas" element={<AppointmentsPage />} />
-              <Route path="/consultas" element={<div>Módulo Consultas</div>} />
-              <Route path="/farmacia" element={<div>Módulo Farmacia</div>} />
-              <Route path="/estetica" element={<div>Módulo Estética</div>} />
-              <Route path="/facturacion" element={<div>Módulo Facturación</div>} />
+              <Route path="/consultas" element={<ConsultationsPage />} />
+              <Route path="/consultas/new" element={<ConsultationForm />} />
+              <Route path="/consultas/:id" element={<ConsultationDetail />} />
+              <Route path="/farmacia" element={<PharmacyPage />} />
+              <Route path="/estetica" element={<GroomingPage />} />
+              <Route path="/estetica/:id" element={<GroomingSessionDetail />} />
+              <Route path="/facturacion" element={<BillingPage />} />
+              <Route path="/facturacion/:id" element={<InvoiceDetail />} />
             </Route>
           </Route>
         </Routes>
