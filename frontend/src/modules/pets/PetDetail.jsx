@@ -1,7 +1,48 @@
 import { useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { usePet } from './usePets';
 import useAuthStore from '../../store/authStore';
+import { usePetHistory } from '../consultations/useConsultations';
+
+function PetConsultationsTab({ petId }) {
+  const { data: history = [], isLoading } = usePetHistory(petId);
+  const navigate = useNavigate();
+  const can = useAuthStore(s => s.can);
+
+  return (
+    <div>
+      <div className="flex justify-between items-center mb-4">
+        <h3 className="font-semibold text-slate-700">Historial Clínico</h3>
+        {/* Usamos el permiso clinica/crear asumiendo un modelo de RBAC */}
+        <button 
+          onClick={() => navigate('/consultas/new', { state: { petId } })} 
+          className="text-sm bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700"
+        >
+          + Nueva consulta
+        </button>
+      </div>
+      {isLoading ? (
+        <div className="text-center py-4 text-slate-500">Cargando historial...</div>
+      ) : history.length > 0 ? (
+        <div className="space-y-3">
+          {history.map(c => (
+            <Link key={c.id} to={`/consultas/${c.id}`} className="block border rounded-lg p-4 bg-slate-50 hover:border-blue-300 hover:bg-blue-50 transition">
+              <div className="flex justify-between items-center">
+                <span className="font-medium text-slate-800">{new Date(c.consultation_date).toLocaleDateString('es-PA')}</span>
+                {c.is_emergency && <span className="text-xs bg-red-100 text-red-700 px-2 py-0.5 rounded-full font-medium">Urgencia</span>}
+              </div>
+              <p className="text-sm text-slate-600 mt-1"><strong className="font-medium">Motivo:</strong> {c.chief_complaint || 'No especificado'}</p>
+              <p className="text-sm text-slate-600"><strong className="font-medium">Dx:</strong> {c.diagnosis || 'Pendiente'}</p>
+              <p className="text-sm text-slate-500 mt-2 text-right">Atendió: Dr(a). {c.veterinarian_name}</p>
+            </Link>
+          ))}
+        </div>
+      ) : (
+        <p className="text-slate-400 text-center py-6">Sin consultas registradas</p>
+      )}
+    </div>
+  );
+}
 
 export default function PetDetail() {
   const { id } = useParams();
@@ -54,28 +95,7 @@ export default function PetDetail() {
           ))}
         </div>
         <div className="p-6">
-          {activeTab === 'historial' && (
-            <div>
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="font-semibold text-slate-700">Últimas consultas</h3>
-                {can('consultations', 'write') && (
-                  <button className="text-sm bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700">+ Nueva consulta</button>
-                )}
-              </div>
-              {pet.last_consultation ? (
-                <div className="border rounded-lg p-4 bg-slate-50">
-                  <div className="flex justify-between">
-                    <span className="font-medium text-slate-800">{new Date(pet.last_consultation.consultation_date).toLocaleDateString('es-PA')}</span>
-                    {pet.last_consultation.is_emergency && <span className="text-xs bg-red-100 text-red-700 px-2 py-0.5 rounded-full">Urgencia</span>}
-                  </div>
-                  <p className="text-sm text-slate-600 mt-1">Dx: {pet.last_consultation.diagnosis || 'Sin diagnóstico'}</p>
-                  <p className="text-sm text-slate-500 mt-1">Vet: {pet.last_consultation.veterinarian_name}</p>
-                </div>
-              ) : (
-                <p className="text-slate-400 text-center py-6">Sin consultas registradas</p>
-              )}
-            </div>
-          )}
+          {activeTab === 'historial' && <PetConsultationsTab petId={pet.id} />}
 
           {activeTab === 'vacunas' && (
             <div>

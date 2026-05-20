@@ -81,13 +81,13 @@ export const LIST_TYPES = `
 `;
 
 export const LIST_STAFF = `
-  SELECT DISTINCT u.id, u.full_name, u.email, string_agg(r.name, ', ') AS roles
+  SELECT DISTINCT u.id, u.full_name, u.email, string_agg(CASE WHEN r.name = 'groomer' THEN 'Estética' WHEN r.name = 'veterinario' THEN 'Veterinario' ELSE r.name END, ', ') AS roles
   FROM users u
   JOIN user_roles ur ON u.id = ur.user_id AND ur.is_active = true
   JOIN roles r ON ur.role_id = r.id
   WHERE u.is_active = true
     AND u.user_type = 'staff'
-    AND r.name IN ('veterinario', 'groomer', 'admin')
+    AND r.name IN ('veterinario', 'groomer')
   GROUP BY u.id
   ORDER BY u.full_name;
 `;

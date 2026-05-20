@@ -1,5 +1,6 @@
 import { Outlet, Link, useNavigate } from 'react-router-dom';
 import useAuthStore from '../store/authStore';
+import NotificationsPanel from '../modules/notifications/NotificationsPanel';
 
 export default function PanelLayout() {
   const { user, logout, can } = useAuthStore();
@@ -43,14 +44,17 @@ export default function PanelLayout() {
       <div className="flex-1 flex flex-col overflow-hidden">
         <header className="bg-white border-b px-6 py-4 flex items-center justify-between">
           <h1 className="text-xl font-semibold text-slate-800">Panel de Administración</h1>
-          <div className="flex items-center space-x-4">
-            <span className="text-sm text-slate-600">Hola, {user?.full_name}</span>
-            <button
-              onClick={handleLogout}
-              className="text-sm bg-red-50 text-red-600 px-3 py-1 rounded hover:bg-red-100 transition"
-            >
-              Cerrar Sesión
-            </button>
+          <div className="flex items-center space-x-6">
+            <NotificationsPanel />
+            <div className="flex items-center space-x-4">
+              <span className="text-sm text-slate-600">Hola, {user?.full_name}</span>
+              <button
+                onClick={handleLogout}
+                className="text-sm bg-red-50 text-red-600 px-3 py-1 rounded hover:bg-red-100 transition"
+              >
+                Cerrar Sesión
+              </button>
+            </div>
           </div>
         </header>
 
