@@ -5,6 +5,7 @@ import { Toaster } from 'react-hot-toast';
 import useAuthStore from './store/authStore';
 import LoginPage from './modules/auth/LoginPage';
 import PrivateRoute from './components/PrivateRoute';
+import PermissionRoute from './components/PermissionRoute';
 import PanelLayout from './components/PanelLayout';
 import ClientsPage from './modules/clients/ClientsPage';
 import ClientDetail from './modules/clients/ClientDetail';
@@ -46,20 +47,52 @@ function App() {
           <Route element={<PrivateRoute />}>
             <Route element={<PanelLayout />}>
               <Route path="/" element={<DashboardPage />} />
-              <Route path="/clientes" element={<ClientsPage />} />
-              <Route path="/clientes/:id" element={<ClientDetail />} />
-              <Route path="/mascotas" element={<PetsPage />} />
-              <Route path="/mascotas/:id" element={<PetDetail />} />
-              <Route path="/citas" element={<AppointmentsPage />} />
-              <Route path="/consultas" element={<ConsultationsPage />} />
-              <Route path="/consultas/new" element={<ConsultationForm />} />
-              <Route path="/consultas/:id" element={<ConsultationDetail />} />
-              <Route path="/farmacia" element={<PharmacyPage />} />
-              <Route path="/estetica" element={<GroomingPage />} />
-              <Route path="/estetica/:id" element={<GroomingSessionDetail />} />
-              <Route path="/facturacion" element={<BillingPage />} />
-              <Route path="/facturacion/:id" element={<InvoiceDetail />} />
-              <Route path="/personal" element={<StaffPage />} />
+
+              {/* Clientes - veterinario, groomer, recepcionista */}
+              <Route element={<PermissionRoute module="clients" action="read" />}>
+                <Route path="/clientes" element={<ClientsPage />} />
+                <Route path="/clientes/:id" element={<ClientDetail />} />
+              </Route>
+
+              {/* Mascotas - veterinario, groomer, recepcionista */}
+              <Route element={<PermissionRoute module="pets" action="read" />}>
+                <Route path="/mascotas" element={<PetsPage />} />
+                <Route path="/mascotas/:id" element={<PetDetail />} />
+              </Route>
+
+              {/* Citas - todos excepto admin solo */}
+              <Route element={<PermissionRoute module="appointments" action="read" />}>
+                <Route path="/citas" element={<AppointmentsPage />} />
+              </Route>
+
+              {/* Consultas - veterinario y admin */}
+              <Route element={<PermissionRoute module="consultations" action="read" />}>
+                <Route path="/consultas" element={<ConsultationsPage />} />
+                <Route path="/consultas/new" element={<ConsultationForm />} />
+                <Route path="/consultas/:id" element={<ConsultationDetail />} />
+              </Route>
+
+              {/* Farmacia - veterinario y admin */}
+              <Route element={<PermissionRoute module="inventory" action="read" />}>
+                <Route path="/farmacia" element={<PharmacyPage />} />
+              </Route>
+
+              {/* Estética - groomer y admin */}
+              <Route element={<PermissionRoute module="grooming" action="read" />}>
+                <Route path="/estetica" element={<GroomingPage />} />
+                <Route path="/estetica/:id" element={<GroomingSessionDetail />} />
+              </Route>
+
+              {/* Facturación - veterinario, groomer, recepcionista, admin */}
+              <Route element={<PermissionRoute module="invoices" action="read" />}>
+                <Route path="/facturacion" element={<BillingPage />} />
+                <Route path="/facturacion/:id" element={<InvoiceDetail />} />
+              </Route>
+
+              {/* Personal - solo admin */}
+              <Route element={<PermissionRoute module="usuarios" action="ver" />}>
+                <Route path="/personal" element={<StaffPage />} />
+              </Route>
             </Route>
           </Route>
         </Routes>

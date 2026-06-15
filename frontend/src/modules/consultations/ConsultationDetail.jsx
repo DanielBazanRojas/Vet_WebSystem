@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useConsultation } from './useConsultations';
 import TreatmentForm from './TreatmentForm';
 import VaccineForm from './VaccineForm';
+import LabResultForm from './LabResultForm';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { ChevronDown, ChevronUp, AlertTriangle, ArrowLeft, Plus, FileText } from 'lucide-react';
@@ -38,6 +39,7 @@ export default function ConsultationDetail() {
   
   const [isTreatmentModalOpen, setIsTreatmentModalOpen] = useState(false);
   const [isVaccineModalOpen, setIsVaccineModalOpen] = useState(false);
+  const [isLabModalOpen, setIsLabModalOpen] = useState(false);
 
   const createInvoice = useCreateInvoice();
 
@@ -207,8 +209,11 @@ export default function ConsultationDetail() {
           <div className="bg-white rounded-lg border shadow-sm overflow-hidden">
             <div className="p-4 bg-slate-50 border-b flex justify-between items-center">
               <h3 className="font-semibold text-slate-700">Resultados de Lab.</h3>
-              {/* Se dejó botón simbólico para futura implementación de módulo Storage */}
-              <button className="p-1.5 bg-purple-100 text-purple-700 rounded hover:bg-purple-200 transition" title="Agregar Lab (Proximamente)">
+              <button
+                onClick={() => setIsLabModalOpen(true)}
+                className="p-1.5 bg-purple-100 text-purple-700 rounded hover:bg-purple-200 transition"
+                title="Agregar Resultado de Laboratorio"
+              >
                 <Plus className="w-4 h-4" />
               </button>
             </div>
@@ -233,6 +238,7 @@ export default function ConsultationDetail() {
 
       {isTreatmentModalOpen && <TreatmentForm consultationId={id} onClose={() => setIsTreatmentModalOpen(false)} />}
       {isVaccineModalOpen && <VaccineForm consultationId={id} onClose={() => setIsVaccineModalOpen(false)} />}
+      {isLabModalOpen && <LabResultForm consultationId={id} onClose={() => setIsLabModalOpen(false)} />}
       
     </div>
   );

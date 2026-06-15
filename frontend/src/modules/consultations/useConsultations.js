@@ -81,6 +81,20 @@ export const useRegisterVaccine = () => {
   });
 };
 
+export const useAddLabResult = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: api.addLabResult,
+    onSuccess: (_, variables) => {
+      toast.success('Resultado de laboratorio agregado');
+      queryClient.invalidateQueries({ queryKey: ['consultations', variables.consultationId] });
+    },
+    onError: (error) => {
+      toast.error(error.response?.data?.message || 'Error al agregar resultado de laboratorio');
+    }
+  });
+};
+
 export const useProductsCatalog = () => {
   return useQuery({
     queryKey: ['products_catalog'],

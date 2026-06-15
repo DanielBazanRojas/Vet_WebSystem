@@ -20,5 +20,6 @@ router.put('/:id', checkPermission('clinica', 'editar'), auditLog, consultations
 router.post('/:id/treatments', checkPermission('clinica', 'crear'), auditLog, consultationsController.addTreatment);
 router.post('/:id/vaccines', checkPermission('clinica', 'crear'), auditLog, consultationsController.registerVaccine);
 router.get('/:id/vaccines', checkPermission('clinica', 'ver'), consultationsController.getConsultationVaccines);
+router.post('/:id/lab-results', checkPermission('clinica', 'crear'), auditLog, consultationsController.addLabResult);
 
 export default router;

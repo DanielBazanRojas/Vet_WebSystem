@@ -2,9 +2,27 @@ import { Outlet, Link, useNavigate } from 'react-router-dom';
 import useAuthStore from '../store/authStore';
 import NotificationsPanel from '../modules/notifications/NotificationsPanel';
 
+const ROLE_LABELS = {
+  admin: { label: 'Administrador', color: 'bg-purple-100 text-purple-700' },
+  veterinario: { label: 'Veterinario', color: 'bg-emerald-100 text-emerald-700' },
+  groomer: { label: 'Estilista', color: 'bg-pink-100 text-pink-700' },
+  recepcionista: { label: 'Recepcionista', color: 'bg-blue-100 text-blue-700' },
+};
+
+const PANEL_TITLE = {
+  admin: 'Panel de Administración',
+  veterinario: 'Panel Veterinario',
+  groomer: 'Panel de Estética',
+  recepcionista: 'Panel de Recepción',
+};
+
 export default function PanelLayout() {
   const { user, logout, can } = useAuthStore();
   const navigate = useNavigate();
+
+  const role = user?.user_type || 'admin';
+  const roleInfo = ROLE_LABELS[role] || { label: role, color: 'bg-slate-100 text-slate-700' };
+  const panelTitle = PANEL_TITLE[role] || 'Panel del Sistema';
 
   const handleLogout = async () => {
     await logout();
@@ -44,11 +62,16 @@ export default function PanelLayout() {
 
       <div className="flex-1 flex flex-col overflow-hidden">
         <header className="bg-white border-b px-6 py-4 flex items-center justify-between">
-          <h1 className="text-xl font-semibold text-slate-800">Panel de Administración</h1>
+          <h1 className="text-xl font-semibold text-slate-800">{panelTitle}</h1>
           <div className="flex items-center space-x-6">
             <NotificationsPanel />
             <div className="flex items-center space-x-4">
-              <span className="text-sm text-slate-600">Hola, {user?.full_name}</span>
+              <div className="text-right">
+                <div className="text-sm font-medium text-slate-800">{user?.full_name}</div>
+                <span className={`text-xs px-2 py-0.5 rounded-full font-semibold ${roleInfo.color}`}>
+                  {roleInfo.label}
+                </span>
+              </div>
               <button
                 onClick={handleLogout}
                 className="text-sm bg-red-50 text-red-600 px-3 py-1 rounded hover:bg-red-100 transition"

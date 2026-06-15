@@ -6,6 +6,7 @@ import { Plus, Search, Eye } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import InvoiceForm from './InvoiceForm';
 import ReportsPage from './ReportsPage';
+import useAuthStore from '../../store/authStore';
 
 const getStatusBadge = (status) => {
   switch (status) {
@@ -24,6 +25,9 @@ export default function BillingPage() {
   const [statusFilter, setStatusFilter] = useState('');
   const [isFormOpen, setIsFormOpen] = useState(false);
   const navigate = useNavigate();
+  const { can } = useAuthStore();
+  const canCreateInvoice = can('invoices', 'write');
+  const canViewReports = can('invoices', 'delete'); // Solo admin tiene delete
 
   const { data: invoices = [], isLoading } = useInvoices();
 
@@ -41,7 +45,7 @@ export default function BillingPage() {
           <h1 className="text-3xl font-bold text-slate-800">Facturación</h1>
           <p className="text-slate-500 mt-1">Gestión de facturas, pagos y reportes de ingresos.</p>
         </div>
-        {activeTab === 'facturas' && (
+        {activeTab === 'facturas' && canCreateInvoice && (
           <button 
             onClick={() => setIsFormOpen(true)}
             className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition shadow-sm font-semibold"
@@ -59,12 +63,14 @@ export default function BillingPage() {
           >
             Facturas
           </button>
-          <button 
-            onClick={() => setActiveTab('reportes')}
-            className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${activeTab === 'reportes' ? 'border-blue-500 text-blue-600' : 'border-transparent text-slate-500 hover:text-slate-700'}`}
-          >
-            Reportes
-          </button>
+          {canViewReports && (
+            <button 
+              onClick={() => setActiveTab('reportes')}
+              className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${activeTab === 'reportes' ? 'border-blue-500 text-blue-600' : 'border-transparent text-slate-500 hover:text-slate-700'}`}
+            >
+              Reportes
+            </button>
+          )}
         </nav>
       </div>
 
