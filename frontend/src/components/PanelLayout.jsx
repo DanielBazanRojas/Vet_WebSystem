@@ -20,6 +20,7 @@ export default function PanelLayout() {
     { name: 'Farmacia', path: '/farmacia', show: can('inventory', 'read') },
     { name: 'Estética', path: '/estetica', show: can('grooming', 'read') },
     { name: 'Facturación', path: '/facturacion', show: can('invoices', 'read') },
+    { name: 'Personal', path: '/personal', show: can('usuarios', 'ver') },
   ];
 
   return (

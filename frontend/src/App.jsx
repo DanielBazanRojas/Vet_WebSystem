@@ -20,6 +20,7 @@ import GroomingSessionDetail from './modules/grooming/GroomingSessionDetail';
 import BillingPage from './modules/billing/BillingPage';
 import InvoiceDetail from './modules/billing/InvoiceDetail';
 import DashboardPage from './modules/dashboard/DashboardPage';
+import StaffPage from './modules/staff/StaffPage';
 
 const queryClient = new QueryClient();
 
@@ -58,6 +59,7 @@ function App() {
               <Route path="/estetica/:id" element={<GroomingSessionDetail />} />
               <Route path="/facturacion" element={<BillingPage />} />
               <Route path="/facturacion/:id" element={<InvoiceDetail />} />
+              <Route path="/personal" element={<StaffPage />} />
             </Route>
           </Route>
         </Routes>
