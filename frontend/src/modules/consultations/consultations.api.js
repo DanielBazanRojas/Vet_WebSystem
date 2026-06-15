@@ -35,6 +35,11 @@ export const registerVaccine = async ({ consultationId, data }) => {
   return response.data;
 };
 
+export const addLabResult = async ({ consultationId, data }) => {
+  const response = await client.post(`/consultations/${consultationId}/lab-results`, data);
+  return response.data;
+};
+
 export const getConsultationVaccines = async (consultationId) => {
   const response = await client.get(`/consultations/${consultationId}/vaccines`);
   return response.data;

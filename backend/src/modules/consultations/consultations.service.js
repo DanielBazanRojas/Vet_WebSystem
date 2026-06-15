@@ -134,6 +134,17 @@ export const getVaccinesByConsultation = async (consultationId) => {
   return res.rows;
 };
 
+export const addLabResult = async (consultationId, data) => {
+  const res = await query(Q.INSERT_LAB_RESULT, [
+    consultationId,
+    data.exam_type,
+    data.description || null,
+    data.result || null,
+    data.exam_date || null
+  ]);
+  return res.rows[0];
+};
+
 export const getProductsCatalog = async () => {
   const res = await query(Q.GET_PRODUCTS_CATALOG);
   return res.rows;

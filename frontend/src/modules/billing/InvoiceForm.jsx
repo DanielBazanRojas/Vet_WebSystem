@@ -17,11 +17,16 @@ const schema = z.object({
 export default function InvoiceForm({ onClose }) {
   const [selectedClient, setSelectedClient] = useState(null);
   const { data: clientsData } = useClients({ limit: 100 });
-  const clients = clientsData?.clients || [];
+  const clients = clientsData?.data || [];
   const createInvoice = useCreateInvoice();
 
   const { register, handleSubmit, setValue, formState: { errors } } = useForm({
-    resolver: zodResolver(schema)
+    resolver: zodResolver(schema),
+    defaultValues: {
+      client_id: '',
+      pet_id: '',
+      notes: ''
+    }
   });
 
   const clientOptions = clients.map(c => ({ value: c.id, label: c.full_name, pets: c.pets }));
@@ -51,7 +56,7 @@ export default function InvoiceForm({ onClose }) {
               options={clientOptions}
               onChange={(opt) => {
                 setSelectedClient(opt);
-                setValue('client_id', opt.value);
+                setValue('client_id', opt ? opt.value : '', { shouldValidate: true });
                 setValue('pet_id', '');
               }}
               placeholder="Buscar cliente..."

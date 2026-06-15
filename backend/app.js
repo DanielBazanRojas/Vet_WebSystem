@@ -14,6 +14,7 @@ import groomingRoutes from './src/modules/grooming/grooming.routes.js';
 import billingRoutes from './src/modules/billing/billing.routes.js';
 import dashboardRoutes from './src/modules/dashboard/dashboard.routes.js';
 import notificationsRoutes from './src/modules/notifications/notifications.routes.js';
+import staffRoutes from './src/modules/staff/staff.routes.js';
 
 const app = express();
 
@@ -42,5 +43,6 @@ app.use('/api/grooming', groomingRoutes);
 app.use('/api/billing', billingRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/notifications', notificationsRoutes);
+app.use('/api/staff', staffRoutes);
 
 export default app;

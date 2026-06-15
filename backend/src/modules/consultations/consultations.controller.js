@@ -55,6 +55,15 @@ export const registerVaccine = async (req, res) => {
   }
 };
 
+export const addLabResult = async (req, res) => {
+  try {
+    const result = await consultationsService.addLabResult(req.params.id, req.body);
+    res.status(201).json({ message: 'Resultado de laboratorio agregado', id: result.id });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 export const getConsultationVaccines = async (req, res) => {
   try {
     const vaccines = await consultationsService.getVaccinesByConsultation(req.params.id);

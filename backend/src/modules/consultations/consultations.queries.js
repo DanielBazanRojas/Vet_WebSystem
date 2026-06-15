@@ -50,6 +50,12 @@ export const GET_LAB_RESULTS = `
   ORDER BY created_at ASC
 `;
 
+export const INSERT_LAB_RESULT = `
+  INSERT INTO lab_results (consultation_id, exam_type, description, result, exam_date)
+  VALUES ($1, $2, $3, $4, $5)
+  RETURNING id;
+`;
+
 export const GET_CONSULTATIONS_BY_PET = `
   SELECT c.id, c.consultation_date, c.chief_complaint, c.diagnosis, u.full_name AS veterinarian_name, c.is_emergency
   FROM consultations c
