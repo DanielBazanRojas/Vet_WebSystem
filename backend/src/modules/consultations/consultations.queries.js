@@ -103,3 +103,37 @@ export const GET_ALL_CONSULTATIONS = `
   JOIN users u ON c.veterinarian_id = u.id
   ORDER BY c.consultation_date DESC
 `;
+
+export const GET_FOLLOWUPS = `
+  SELECT * FROM consultation_followups
+  WHERE consultation_id = $1
+  ORDER BY followup_date DESC
+`;
+
+export const INSERT_FOLLOWUP = `
+  INSERT INTO consultation_followups (
+    consultation_id, followup_date, weight_kg, temperature_c, evolution, 
+    indications, next_followup_date, requires_attention, created_by
+  ) VALUES (
+    $1, COALESCE($2, now()), $3, $4, $5, $6, $7, $8, $9
+  ) RETURNING *
+`;
+
+export const UPDATE_FOLLOWUP = `
+  UPDATE consultation_followups
+  SET followup_date = COALESCE($2, followup_date),
+      weight_kg = $3,
+      temperature_c = $4,
+      evolution = COALESCE($5, evolution),
+      indications = $6,
+      next_followup_date = $7,
+      requires_attention = COALESCE($8, requires_attention)
+  WHERE id = $1
+  RETURNING *
+`;
+
+export const DELETE_FOLLOWUP = `
+  DELETE FROM consultation_followups
+  WHERE id = $1
+  RETURNING id
+`;

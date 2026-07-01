@@ -54,3 +54,23 @@ export const getVaccinesCatalog = async () => {
   const response = await client.get('/consultations/catalog/vaccines');
   return response.data;
 };
+
+export const getFollowups = async (consultationId) => {
+  const response = await client.get(`/consultations/${consultationId}/followups`);
+  return response.data;
+};
+
+export const createFollowup = async ({ consultationId, data }) => {
+  const response = await client.post(`/consultations/${consultationId}/followups`, data);
+  return response.data;
+};
+
+export const updateFollowup = async ({ consultationId, followupId, data }) => {
+  const response = await client.put(`/consultations/${consultationId}/followups/${followupId}`, data);
+  return response.data;
+};
+
+export const deleteFollowup = async ({ consultationId, followupId }) => {
+  const response = await client.delete(`/consultations/${consultationId}/followups/${followupId}`);
+  return response.data;
+};
