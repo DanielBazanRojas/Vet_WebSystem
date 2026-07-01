@@ -99,3 +99,41 @@ export const getAllConsultations = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+export const getFollowups = async (req, res) => {
+  try {
+    const followups = await consultationsService.getFollowups(req.params.id);
+    res.json(followups);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export const createFollowup = async (req, res) => {
+  try {
+    const followup = await consultationsService.createFollowup(req.params.id, req.body, req.user.id);
+    res.status(201).json(followup);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export const updateFollowup = async (req, res) => {
+  try {
+    const followup = await consultationsService.updateFollowup(req.params.fid, req.body);
+    res.json(followup);
+  } catch (error) {
+    if (error.message === 'Seguimiento no encontrado') return res.status(404).json({ message: error.message });
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export const deleteFollowup = async (req, res) => {
+  try {
+    await consultationsService.deleteFollowup(req.params.fid);
+    res.json({ message: 'Seguimiento eliminado exitosamente' });
+  } catch (error) {
+    if (error.message === 'Seguimiento no encontrado') return res.status(404).json({ message: error.message });
+    res.status(500).json({ message: error.message });
+  }
+};

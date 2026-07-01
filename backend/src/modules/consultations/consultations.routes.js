@@ -22,4 +22,10 @@ router.post('/:id/vaccines', checkPermission('clinica', 'crear'), auditLog, cons
 router.get('/:id/vaccines', checkPermission('clinica', 'ver'), consultationsController.getConsultationVaccines);
 router.post('/:id/lab-results', checkPermission('clinica', 'crear'), auditLog, consultationsController.addLabResult);
 
+// Seguimiento (Followups)
+router.get('/:id/followups', checkPermission('clinica', 'ver'), consultationsController.getFollowups);
+router.post('/:id/followups', checkPermission('clinica', 'crear'), auditLog, consultationsController.createFollowup);
+router.put('/:id/followups/:fid', checkPermission('clinica', 'crear'), auditLog, consultationsController.updateFollowup);
+router.delete('/:id/followups/:fid', checkPermission('clinica', 'editar'), auditLog, consultationsController.deleteFollowup);
+
 export default router;

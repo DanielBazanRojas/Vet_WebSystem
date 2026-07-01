@@ -110,3 +110,53 @@ export const useVaccinesCatalog = () => {
     staleTime: 1000 * 60 * 60
   });
 };
+
+export const useFollowups = (consultationId) => {
+  return useQuery({
+    queryKey: ['followups', consultationId],
+    queryFn: () => api.getFollowups(consultationId),
+    enabled: !!consultationId
+  });
+};
+
+export const useCreateFollowup = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: api.createFollowup,
+    onSuccess: (_, variables) => {
+      toast.success('Seguimiento registrado exitosamente');
+      queryClient.invalidateQueries({ queryKey: ['followups', variables.consultationId] });
+    },
+    onError: (error) => {
+      toast.error(error.response?.data?.message || 'Error al registrar seguimiento');
+    }
+  });
+};
+
+export const useUpdateFollowup = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: api.updateFollowup,
+    onSuccess: (_, variables) => {
+      toast.success('Seguimiento actualizado exitosamente');
+      queryClient.invalidateQueries({ queryKey: ['followups', variables.consultationId] });
+    },
+    onError: (error) => {
+      toast.error(error.response?.data?.message || 'Error al actualizar seguimiento');
+    }
+  });
+};
+
+export const useDeleteFollowup = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: api.deleteFollowup,
+    onSuccess: (_, variables) => {
+      toast.success('Seguimiento eliminado exitosamente');
+      queryClient.invalidateQueries({ queryKey: ['followups', variables.consultationId] });
+    },
+    onError: (error) => {
+      toast.error(error.response?.data?.message || 'Error al eliminar seguimiento');
+    }
+  });
+};

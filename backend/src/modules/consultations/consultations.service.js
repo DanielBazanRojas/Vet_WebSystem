@@ -159,3 +159,44 @@ export const getAllConsultations = async () => {
   const res = await query(Q.GET_ALL_CONSULTATIONS);
   return res.rows;
 };
+
+export const getFollowups = async (consultationId) => {
+  const res = await query(Q.GET_FOLLOWUPS, [consultationId]);
+  return res.rows;
+};
+
+export const createFollowup = async (consultationId, data, userId) => {
+  const res = await query(Q.INSERT_FOLLOWUP, [
+    consultationId,
+    data.followup_date || null,
+    data.weight_kg !== undefined && data.weight_kg !== '' ? data.weight_kg : null,
+    data.temperature_c !== undefined && data.temperature_c !== '' ? data.temperature_c : null,
+    data.evolution,
+    data.indications || null,
+    data.next_followup_date || null,
+    data.requires_attention || false,
+    userId
+  ]);
+  return res.rows[0];
+};
+
+export const updateFollowup = async (followupId, data) => {
+  const res = await query(Q.UPDATE_FOLLOWUP, [
+    followupId,
+    data.followup_date || null,
+    data.weight_kg !== undefined && data.weight_kg !== '' ? data.weight_kg : null,
+    data.temperature_c !== undefined && data.temperature_c !== '' ? data.temperature_c : null,
+    data.evolution,
+    data.indications || null,
+    data.next_followup_date || null,
+    data.requires_attention || false
+  ]);
+  if (res.rowCount === 0) throw new Error('Seguimiento no encontrado');
+  return res.rows[0];
+};
+
+export const deleteFollowup = async (followupId) => {
+  const res = await query(Q.DELETE_FOLLOWUP, [followupId]);
+  if (res.rowCount === 0) throw new Error('Seguimiento no encontrado');
+  return res.rows[0];
+};

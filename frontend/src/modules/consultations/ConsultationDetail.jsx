@@ -1,13 +1,15 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import { useConsultation } from './useConsultations';
+import { useConsultation, useFollowups, useDeleteFollowup } from './useConsultations';
 import TreatmentForm from './TreatmentForm';
 import VaccineForm from './VaccineForm';
 import LabResultForm from './LabResultForm';
+import FollowupForm from './FollowupForm';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { ChevronDown, ChevronUp, AlertTriangle, ArrowLeft, Plus, FileText } from 'lucide-react';
 import { useCreateInvoice } from '../billing/useBilling';
+import useAuthStore from '../../store/authStore';
 import toast from 'react-hot-toast';
 
 const Accordion = ({ title, content, defaultOpen = false }) => {
@@ -32,14 +34,40 @@ const Accordion = ({ title, content, defaultOpen = false }) => {
   );
 };
 
+const CollapsibleIndications = ({ indications }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  return (
+    <div className="border border-slate-100 rounded bg-white mt-2">
+      <button 
+        type="button" 
+        onClick={() => setIsOpen(!isOpen)} 
+        className="w-full text-left px-3 py-1.5 bg-slate-50 hover:bg-slate-100 transition text-xs font-semibold text-slate-600 flex justify-between items-center"
+      >
+        <span>Ver indicaciones</span>
+        {isOpen ? <ChevronUp className="w-3.5 h-3.5 text-slate-400" /> : <ChevronDown className="w-3.5 h-3.5 text-slate-400" />}
+      </button>
+      {isOpen && (
+        <div className="p-3 text-xs text-slate-600 whitespace-pre-wrap">
+          {indications}
+        </div>
+      )}
+    </div>
+  );
+};
+
 export default function ConsultationDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { can } = useAuthStore();
   const { data: consultation, isLoading, error } = useConsultation(id);
+  const { data: followups = [] } = useFollowups(id);
+  const deleteFollowupMutation = useDeleteFollowup();
   
   const [isTreatmentModalOpen, setIsTreatmentModalOpen] = useState(false);
   const [isVaccineModalOpen, setIsVaccineModalOpen] = useState(false);
   const [isLabModalOpen, setIsLabModalOpen] = useState(false);
+  const [isFollowupModalOpen, setIsFollowupModalOpen] = useState(false);
+  const [selectedFollowup, setSelectedFollowup] = useState(null);
 
   const createInvoice = useCreateInvoice();
 
@@ -61,6 +89,16 @@ export default function ConsultationDetail() {
     }
   };
 
+  const handleDeleteFollowup = async (followupId) => {
+    if (window.confirm('¿Está seguro de eliminar este seguimiento?')) {
+      try {
+        await deleteFollowupMutation.mutateAsync({ consultationId: id, followupId });
+      } catch (error) {
+        // El error ya es manejado por el hook
+      }
+    }
+  };
+
   return (
     <div className="max-w-5xl mx-auto pb-12">
       {/* Header */}
@@ -71,7 +109,7 @@ export default function ConsultationDetail() {
           </button>
           <div>
             <h1 className="text-2xl font-bold text-slate-800">
-              Consulta de {consultation.pet_name}
+               Consulta de {consultation.pet_name}
             </h1>
             <p className="text-slate-500">
               {format(new Date(consultation.consultation_date), "dd 'de' MMMM, yyyy 'a las' HH:mm", { locale: es })}
@@ -144,20 +182,22 @@ export default function ConsultationDetail() {
 
         </div>
 
-        {/* Columna Derecha: Tratamientos y Vacunas */}
+        {/* Columna Derecha: Tratamientos, Vacunas, Laboratorio y Seguimientos */}
         <div className="space-y-6">
           
           {/* Tratamientos */}
           <div className="bg-white rounded-lg border shadow-sm overflow-hidden">
             <div className="p-4 bg-slate-50 border-b flex justify-between items-center">
               <h3 className="font-semibold text-slate-700">Tratamientos</h3>
-              <button 
-                onClick={() => setIsTreatmentModalOpen(true)}
-                className="p-1.5 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 transition"
-                title="Agregar Tratamiento"
-              >
-                <Plus className="w-4 h-4" />
-              </button>
+              {can('clinica', 'crear') && (
+                <button 
+                  onClick={() => setIsTreatmentModalOpen(true)}
+                  className="p-1.5 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 transition"
+                  title="Agregar Tratamiento"
+                >
+                  <Plus className="w-4 h-4" />
+                </button>
+              )}
             </div>
             <div className="p-4">
               {consultation.treatments?.length > 0 ? (
@@ -180,13 +220,15 @@ export default function ConsultationDetail() {
           <div className="bg-white rounded-lg border shadow-sm overflow-hidden">
             <div className="p-4 bg-slate-50 border-b flex justify-between items-center">
               <h3 className="font-semibold text-slate-700">Vacunas Aplicadas</h3>
-              <button 
-                onClick={() => setIsVaccineModalOpen(true)}
-                className="p-1.5 bg-emerald-100 text-emerald-700 rounded hover:bg-emerald-200 transition"
-                title="Registrar Vacuna"
-              >
-                <Plus className="w-4 h-4" />
-              </button>
+              {can('clinica', 'crear') && (
+                <button 
+                  onClick={() => setIsVaccineModalOpen(true)}
+                  className="p-1.5 bg-emerald-100 text-emerald-700 rounded hover:bg-emerald-200 transition"
+                  title="Registrar Vacuna"
+                >
+                  <Plus className="w-4 h-4" />
+                </button>
+              )}
             </div>
             <div className="p-4">
               {consultation.vaccination_records?.length > 0 ? (
@@ -209,13 +251,15 @@ export default function ConsultationDetail() {
           <div className="bg-white rounded-lg border shadow-sm overflow-hidden">
             <div className="p-4 bg-slate-50 border-b flex justify-between items-center">
               <h3 className="font-semibold text-slate-700">Resultados de Lab.</h3>
-              <button
-                onClick={() => setIsLabModalOpen(true)}
-                className="p-1.5 bg-purple-100 text-purple-700 rounded hover:bg-purple-200 transition"
-                title="Agregar Resultado de Laboratorio"
-              >
-                <Plus className="w-4 h-4" />
-              </button>
+              {can('clinica', 'crear') && (
+                <button
+                  onClick={() => setIsLabModalOpen(true)}
+                  className="p-1.5 bg-purple-100 text-purple-700 rounded hover:bg-purple-200 transition"
+                  title="Agregar Resultado de Laboratorio"
+                >
+                  <Plus className="w-4 h-4" />
+                </button>
+              )}
             </div>
             <div className="p-4">
               {consultation.lab_results?.length > 0 ? (
@@ -233,12 +277,132 @@ export default function ConsultationDetail() {
             </div>
           </div>
 
+          {/* Seguimiento */}
+          <div className="bg-white rounded-lg border shadow-sm overflow-hidden">
+            <div className="p-4 bg-slate-50 border-b flex justify-between items-center">
+              <h3 className="font-semibold text-slate-700">Seguimiento</h3>
+              {can('clinica', 'crear') && (
+                <button
+                  onClick={() => {
+                    setSelectedFollowup(null);
+                    setIsFollowupModalOpen(true);
+                  }}
+                  className="p-1.5 bg-purple-100 text-purple-700 rounded hover:bg-purple-200 transition"
+                  title="Agregar Seguimiento"
+                >
+                  <Plus className="w-4 h-4" />
+                </button>
+              )}
+            </div>
+            <div className="p-4 space-y-4">
+              {followups.length > 0 ? (
+                <div className="space-y-4">
+                  {followups.map(f => {
+                    const hasWeightDiff = f.weight_kg !== null && consultation.weight_kg !== null;
+                    const weightDiff = hasWeightDiff ? (f.weight_kg - consultation.weight_kg) : 0;
+                    const formattedWeightDiff = weightDiff > 0 ? `+${weightDiff.toFixed(2)}` : weightDiff.toFixed(2);
+
+                    const hasTempDiff = f.temperature_c !== null && consultation.temperature_c !== null;
+                    const tempDiff = hasTempDiff ? (f.temperature_c - consultation.temperature_c) : 0;
+                    const formattedTempDiff = tempDiff > 0 ? `+${tempDiff.toFixed(1)}` : tempDiff.toFixed(1);
+
+                    return (
+                      <div 
+                        key={f.id} 
+                        className={`p-4 rounded-lg border ${f.requires_attention ? 'border-red-500 bg-red-50/30' : 'border-slate-200'} space-y-3 relative`}
+                      >
+                        <div className="flex justify-between items-start">
+                          <div>
+                            <span className="text-xs font-semibold text-slate-500 block">
+                              {format(new Date(f.followup_date), 'dd/MM/yyyy HH:mm')}
+                            </span>
+                            {f.requires_attention && (
+                              <span className="inline-block mt-1 px-2 py-0.5 bg-red-100 text-red-800 text-[10px] font-bold rounded-full uppercase tracking-wider">
+                                Atención urgente
+                              </span>
+                            )}
+                          </div>
+                          {can('clinica', 'editar') && (
+                            <div className="flex items-center space-x-1">
+                              <button 
+                                onClick={() => {
+                                  setSelectedFollowup(f);
+                                  setIsFollowupModalOpen(true);
+                                }}
+                                className="p-1 text-slate-400 hover:text-blue-600 hover:bg-slate-100 rounded transition"
+                                title="Editar"
+                              >
+                                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                </svg>
+                              </button>
+                              <button 
+                                onClick={() => handleDeleteFollowup(f.id)}
+                                className="p-1 text-slate-400 hover:text-red-600 hover:bg-slate-100 rounded transition"
+                                title="Eliminar"
+                              >
+                                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                </svg>
+                              </button>
+                            </div>
+                          )}
+                        </div>
+
+                        <div className="text-sm text-slate-700 whitespace-pre-wrap font-medium">
+                          {f.evolution}
+                        </div>
+
+                        <div className="flex gap-4 text-xs text-slate-500 bg-slate-50 p-2 rounded">
+                          {f.weight_kg !== null && (
+                            <div>
+                              <span className="font-semibold text-slate-600">Peso:</span> {f.weight_kg} kg 
+                              {hasWeightDiff && <span className={`ml-1 font-bold ${weightDiff > 0 ? 'text-emerald-600' : weightDiff < 0 ? 'text-red-600' : 'text-slate-500'}`}>({formattedWeightDiff} kg)</span>}
+                            </div>
+                          )}
+                          {f.temperature_c !== null && (
+                            <div>
+                              <span className="font-semibold text-slate-600">Temp:</span> {f.temperature_c} °C
+                              {hasTempDiff && <span className={`ml-1 font-bold ${tempDiff > 0 ? 'text-red-600' : tempDiff < 0 ? 'text-emerald-600' : 'text-slate-500'}`}>({formattedTempDiff} °C)</span>}
+                            </div>
+                          )}
+                        </div>
+
+                        {f.next_followup_date && (
+                          <div className="text-xs text-purple-600 font-semibold">
+                            Próximo control: {format(new Date(f.next_followup_date), 'dd/MM/yyyy')}
+                          </div>
+                        )}
+
+                        {f.indications && (
+                          <CollapsibleIndications indications={f.indications} />
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : (
+                <p className="text-sm text-slate-400 text-center py-2">No hay seguimientos registrados.</p>
+              )}
+            </div>
+          </div>
+
         </div>
       </div>
 
       {isTreatmentModalOpen && <TreatmentForm consultationId={id} onClose={() => setIsTreatmentModalOpen(false)} />}
       {isVaccineModalOpen && <VaccineForm consultationId={id} onClose={() => setIsVaccineModalOpen(false)} />}
       {isLabModalOpen && <LabResultForm consultationId={id} onClose={() => setIsLabModalOpen(false)} />}
+      {isFollowupModalOpen && (
+        <FollowupForm 
+          consultationId={id} 
+          followup={selectedFollowup} 
+          onClose={() => {
+            setIsFollowupModalOpen(false);
+            setSelectedFollowup(null);
+          }} 
+        />
+      )}
       
     </div>
   );
