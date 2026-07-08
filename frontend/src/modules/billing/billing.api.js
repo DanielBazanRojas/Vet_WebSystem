@@ -49,3 +49,19 @@ export const getPaymentMethods = async () => {
   const { data } = await client.get('/billing/payment-methods');
   return data;
 };
+
+export const downloadInvoicePdf = async (id, invoiceNumber) => {
+  const response = await client.get(`/billing/invoices/${id}/pdf`, {
+    responseType: 'blob',
+  });
+  const url = window.URL.createObjectURL(new Blob([response.data], { type: 'application/pdf' }));
+  const link = document.createElement('a');
+  link.href = url;
+  const safeName = (invoiceNumber || id).replace(/[^a-zA-Z0-9\-]/g, '-');
+  link.setAttribute('download', `factura-${safeName}.pdf`);
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  window.URL.revokeObjectURL(url);
+};
+

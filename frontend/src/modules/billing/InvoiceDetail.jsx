@@ -3,8 +3,9 @@ import { useState } from 'react';
 import { useInvoice, useAddInvoiceItem, useRemoveInvoiceItem, useEmitInvoice, useCancelInvoice, useRegisterPayment, usePaymentMethods } from './useBilling';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { ArrowLeft, CheckCircle, FileText, Ban, Trash2, Plus, DollarSign } from 'lucide-react';
+import { ArrowLeft, CheckCircle, FileText, Ban, Trash2, Plus, DollarSign, Download, Loader2 } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { downloadInvoicePdf } from './billing.api';
 
 // Helper for badges
 const getStatusBadge = (status) => {
@@ -29,6 +30,7 @@ export default function InvoiceDetail() {
 
   const [isAddItemOpen, setIsAddItemOpen] = useState(false);
   const [isAddPaymentOpen, setIsAddPaymentOpen] = useState(false);
+  const [isPdfLoading, setIsPdfLoading] = useState(false);
 
   if (isLoading) return <div className="p-8 text-center">Cargando...</div>;
   if (!invoice) return <div className="p-8 text-center text-red-500">Factura no encontrada</div>;
@@ -54,6 +56,18 @@ export default function InvoiceDetail() {
       await cancelInvoice.mutateAsync(id);
       toast.success('Factura anulada');
     } catch (e) { toast.error('Error al anular'); }
+  };
+
+  const handleDownloadPdf = async () => {
+    setIsPdfLoading(true);
+    try {
+      await downloadInvoicePdf(id, invoice.invoice_number);
+      toast.success('PDF descargado');
+    } catch (e) {
+      toast.error('Error al generar el PDF');
+    } finally {
+      setIsPdfLoading(false);
+    }
   };
 
   return (
@@ -208,6 +222,16 @@ export default function InvoiceDetail() {
                   <CheckCircle className="w-5 h-5" /> Emitir Factura
                 </button>
               )}
+              <button
+                onClick={handleDownloadPdf}
+                disabled={isPdfLoading}
+                className="w-full flex items-center justify-center gap-2 bg-slate-700 text-white py-2 rounded-md font-semibold hover:bg-slate-800 transition disabled:opacity-50"
+              >
+                {isPdfLoading
+                  ? <><Loader2 className="w-4 h-4 animate-spin" /> Generando...</>
+                  : <><Download className="w-4 h-4" /> Descargar PDF</>
+                }
+              </button>
               {invoice.status !== 'anulada' && (
                 <button onClick={handleCancel} className="w-full flex items-center justify-center gap-2 bg-red-50 text-red-600 py-2 rounded-md font-semibold hover:bg-red-100 transition">
                   <Ban className="w-5 h-5" /> Anular Factura
