@@ -18,7 +18,7 @@ export default function AppointmentsPage() {
   const [currentWeekStart, setCurrentWeekStart] = useState(startOfWeek(startOfToday(), { weekStartsOn: 1 }));
   const [selectedMobileDay, setSelectedMobileDay] = useState(startOfToday());
   const [selectedStaff, setSelectedStaff] = useState('');
-  
+
   // Drawer/Modal states
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [selectedAppt, setSelectedAppt] = useState(null);
@@ -94,8 +94,8 @@ export default function AppointmentsPage() {
         </div>
 
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full lg:w-auto">
-          <select 
-            value={selectedStaff} 
+          <select
+            value={selectedStaff}
             onChange={(e) => setSelectedStaff(e.target.value)}
             className="border rounded-md px-3 py-2 text-sm bg-slate-50 w-full sm:min-w-[200px]"
           >
@@ -104,7 +104,7 @@ export default function AppointmentsPage() {
           </select>
 
           {can('appointments', 'write') && (
-            <button 
+            <button
               onClick={() => { setSelectedAppt(null); setSelectedSlot(null); setIsFormOpen(true); }}
               className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition text-sm font-medium whitespace-nowrap text-center"
             >
@@ -117,7 +117,7 @@ export default function AppointmentsPage() {
       {/* Mobile Calendar View */}
       <div className="bg-white rounded-lg shadow-sm border p-4 md:hidden flex flex-col gap-4">
         <div className="flex justify-between items-center gap-2">
-          <button 
+          <button
             onClick={() => setSelectedMobileDay(d => addDays(d, -1))}
             className="px-3 py-1.5 border rounded bg-slate-50 text-slate-700 font-medium text-sm"
           >
@@ -126,7 +126,7 @@ export default function AppointmentsPage() {
           <span className="font-bold text-slate-800 capitalize text-sm">
             {format(selectedMobileDay, "EEEE, d 'de' MMMM", { locale: es })}
           </span>
-          <button 
+          <button
             onClick={() => setSelectedMobileDay(d => addDays(d, 1))}
             className="px-3 py-1.5 border rounded bg-slate-50 text-slate-700 font-medium text-sm"
           >
@@ -138,8 +138,8 @@ export default function AppointmentsPage() {
           <div className="flex justify-between items-center border-b pb-2">
             <h3 className="font-semibold text-slate-700 text-sm">Citas del día</h3>
             {can('appointments', 'write') && (
-              <button 
-                onClick={() => openFormForSlot(selectedMobileDay, '09:00')} 
+              <button
+                onClick={() => openFormForSlot(selectedMobileDay, '09:00')}
                 className="text-xs text-blue-600 font-bold hover:underline"
               >
                 + Agendar para hoy
@@ -154,8 +154,8 @@ export default function AppointmentsPage() {
                 .filter(a => a.scheduled_date.substring(0, 10) === format(selectedMobileDay, 'yyyy-MM-dd'))
                 .sort((a, b) => a.scheduled_time.localeCompare(b.scheduled_time))
                 .map(appt => (
-                  <div 
-                    key={appt.id} 
+                  <div
+                    key={appt.id}
                     onClick={() => { setSelectedAppt(appt); setIsFormOpen(true); }}
                     className="p-4 border rounded-lg hover:shadow-md transition bg-slate-50 space-y-2 relative cursor-pointer"
                   >
@@ -214,8 +214,8 @@ export default function AppointmentsPage() {
                     });
 
                     return (
-                      <td 
-                        key={day.toISOString()} 
+                      <td
+                        key={day.toISOString()}
                         className="border-b border-r align-top h-24 hover:bg-slate-50 transition relative group cursor-crosshair w-[calc((100%-5rem)/6)]"
                         onClick={() => openFormForSlot(day, time)}
                       >
@@ -225,17 +225,17 @@ export default function AppointmentsPage() {
                         {dayAppointments.map(appt => {
                           const slots = appt.duration_min / 30;
                           return (
-                            <div 
-                              key={appt.id} 
+                            <div
+                              key={appt.id}
                               className="absolute left-1 right-1 pointer-events-auto z-10"
-                              style={{ 
-                                top: '4px', 
+                              style={{
+                                top: '4px',
                                 height: `calc(${slots * 100}% + ${Math.max(0, slots - 1)}px - 8px)`
                               }}
                               onClick={(e) => e.stopPropagation()}
                             >
-                              <AppointmentCard 
-                                appointment={appt} 
+                              <AppointmentCard
+                                appointment={appt}
                                 onClick={(a) => { setSelectedAppt(a); setIsFormOpen(true); }}
                                 onConfirm={handleConfirmAppt}
                                 onCancel={handleCancelAppt}
@@ -258,7 +258,7 @@ export default function AppointmentsPage() {
         <h2 className="text-lg font-bold text-slate-800 mb-4 border-b pb-2">
           Listado de Citas (Semana actual)
         </h2>
-        
+
         {appointments.length === 0 ? (
           <p className="text-slate-500 text-sm py-4 text-center">No hay citas para esta semana o el filtro actual.</p>
         ) : (
@@ -291,7 +291,7 @@ export default function AppointmentsPage() {
                     <td className="p-3 text-slate-600 block md:table-cell flex justify-between items-center">
                       <span className="md:hidden font-semibold text-slate-500">Dueño:</span>
                       <div className="text-right md:text-left">
-                        {appt.client_name}<br/>
+                        {appt.client_name}<br />
                         <span className="text-xs text-slate-400">{appt.client_phone}</span>
                       </div>
                     </td>
@@ -309,7 +309,7 @@ export default function AppointmentsPage() {
                     </td>
                     <td className="p-3 text-right block md:table-cell flex justify-between md:justify-end items-center border-t md:border-t-0 pt-2 md:pt-0">
                       <span className="md:hidden font-semibold text-slate-500">Acciones:</span>
-                      <button 
+                      <button
                         onClick={() => { setSelectedAppt(appt); setIsFormOpen(true); }}
                         className="text-blue-600 hover:text-blue-800 font-medium text-sm transition"
                       >
@@ -335,7 +335,7 @@ export default function AppointmentsPage() {
               <button onClick={() => setIsFormOpen(false)} className="text-slate-400 hover:text-slate-600 text-2xl font-bold">&times;</button>
             </div>
             <div className="p-4 flex-1 bg-white">
-              <AppointmentForm 
+              <AppointmentForm
                 initialData={selectedAppt}
                 initialDate={selectedSlot?.date}
                 initialTime={selectedSlot?.time}
@@ -345,6 +345,7 @@ export default function AppointmentsPage() {
             </div>
           </div>
         </div>
+      )}
     </div>
   );
 }
