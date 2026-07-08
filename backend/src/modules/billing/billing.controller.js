@@ -1,4 +1,5 @@
 import * as billingService from './billing.service.js';
+import { generateInvoicePdf } from './billing.pdf.js';
 
 export const getInvoices = async (req, res) => {
   try {
@@ -98,5 +99,22 @@ export const getIncomeReport = async (req, res) => {
     res.json(report);
   } catch (error) {
     res.status(500).json({ message: error.message });
+  }
+};
+
+export const downloadInvoicePdf = async (req, res) => {
+  try {
+    const data = await billingService.getInvoiceForPdf(req.params.id);
+    const buffer = await generateInvoicePdf(data);
+
+    const safeNumber = (data.invoice_number || req.params.id).replace(/[^a-zA-Z0-9\-]/g, '-');
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `attachment; filename="factura-${safeNumber}.pdf"`);
+    res.setHeader('Content-Length', buffer.length);
+    res.send(buffer);
+  } catch (error) {
+    if (error.message === 'Factura no encontrada') return res.status(404).json({ message: error.message });
+    console.error('Error generating PDF:', error);
+    res.status(500).json({ message: 'Error al generar el PDF' });
   }
 };

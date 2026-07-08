@@ -20,5 +20,6 @@ router.patch('/invoices/:id/cancel', checkPermission('facturacion', 'anular'), a
 
 router.get('/reports/income', checkPermission('facturacion', 'reportes'), billingController.getIncomeReport);
 router.get('/payment-methods', checkPermission('facturacion', 'ver'), billingController.getPaymentMethods);
+router.get('/invoices/:id/pdf', checkPermission('facturacion', 'ver'), billingController.downloadInvoicePdf);
 
 export default router;

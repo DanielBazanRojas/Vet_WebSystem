@@ -2,11 +2,12 @@ import { useState } from 'react';
 import { useInvoices } from './useBilling';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { Plus, Search, Eye } from 'lucide-react';
+import { Plus, Search, Eye, Download, Loader2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import InvoiceForm from './InvoiceForm';
 import ReportsPage from './ReportsPage';
 import useAuthStore from '../../store/authStore';
+import { downloadInvoicePdf } from './billing.api';
 
 const getStatusBadge = (status) => {
   switch (status) {
@@ -30,6 +31,19 @@ export default function BillingPage() {
   const canViewReports = can('invoices', 'delete'); // Solo admin tiene delete
 
   const { data: invoices = [], isLoading } = useInvoices();
+  const [downloadingId, setDownloadingId] = useState(null);
+
+  const handleRowDownload = async (inv, e) => {
+    e.stopPropagation();
+    setDownloadingId(inv.id);
+    try {
+      await downloadInvoicePdf(inv.id, inv.invoice_number);
+    } catch {
+      // toast is shown inside downloadInvoicePdf or caught here
+    } finally {
+      setDownloadingId(null);
+    }
+  };
 
   const filteredInvoices = invoices.filter(inv => {
     const matchSearch = inv.invoice_number?.toLowerCase().includes(search.toLowerCase()) || 
@@ -136,13 +150,25 @@ export default function BillingPage() {
                         {getStatusBadge(inv.status)}
                       </td>
                       <td className="px-6 py-4 text-right">
-                        <button 
-                          onClick={() => navigate(`/facturacion/${inv.id}`)}
-                          className="p-2 text-blue-600 hover:bg-blue-50 rounded-full transition"
-                          title="Ver Detalle"
-                        >
-                          <Eye className="w-5 h-5" />
-                        </button>
+                        <div className="flex items-center justify-end gap-1">
+                          <button 
+                            onClick={() => navigate(`/facturacion/${inv.id}`)}
+                            className="p-2 text-blue-600 hover:bg-blue-50 rounded-full transition"
+                            title="Ver Detalle"
+                          >
+                            <Eye className="w-5 h-5" />
+                          </button>
+                          <button
+                            onClick={(e) => handleRowDownload(inv, e)}
+                            disabled={downloadingId === inv.id}
+                            className="p-2 text-slate-500 hover:bg-slate-100 rounded-full transition disabled:opacity-40"
+                            title="Descargar PDF"
+                          >
+                            {downloadingId === inv.id
+                              ? <Loader2 className="w-4 h-4 animate-spin" />
+                              : <Download className="w-4 h-4" />}
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   ))

@@ -155,3 +155,27 @@ export const getIncomeReport = async (dateFrom, dateTo, groupBy = 'dia') => {
     breakdown: breakdownRes.rows
   };
 };
+
+export const getInvoiceForPdf = async (id) => {
+  const invoiceRes = await query(Q.GET_INVOICE_FOR_PDF, [id]);
+  if (invoiceRes.rowCount === 0) throw new Error('Factura no encontrada');
+  const invoice = invoiceRes.rows[0];
+
+  const [itemsRes, paymentsRes, settingsRes] = await Promise.all([
+    query(Q.GET_INVOICE_ITEMS, [id]),
+    query(Q.GET_INVOICE_PAYMENTS, [id]),
+    query(Q.GET_CLINIC_SETTINGS)
+  ]);
+
+  invoice.items = itemsRes.rows;
+  invoice.payments = paymentsRes.rows;
+
+  // Convert settings array to object
+  const clinic = {};
+  for (const row of settingsRes.rows) {
+    clinic[row.key] = row.value;
+  }
+  invoice.clinic = clinic;
+
+  return invoice;
+};

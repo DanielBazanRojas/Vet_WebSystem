@@ -121,3 +121,24 @@ export const GET_INCOME_REPORT_BREAKDOWN = `
     AND i.issue_date >= $1 AND i.issue_date <= $2
   GROUP BY ii.item_type
 `;
+
+export const GET_INVOICE_FOR_PDF = `
+  SELECT 
+    i.id, i.invoice_number, i.status, i.issue_date,
+    i.subtotal, i.tax_amount, i.discount_amount, i.total,
+    i.notes,
+    c.full_name AS client_name, c.email AS client_email,
+    c.dni AS client_dni, c.phone AS client_phone,
+    p.name AS pet_name,
+    sp.name AS pet_species
+  FROM invoices i
+  JOIN clients c ON i.client_id = c.id
+  LEFT JOIN pets p ON i.pet_id = p.id
+  LEFT JOIN species sp ON p.species_id = sp.id
+  WHERE i.id = $1
+`;
+
+export const GET_CLINIC_SETTINGS = `
+  SELECT key, value FROM system_settings
+  WHERE key IN ('clinic_name', 'clinic_address', 'clinic_phone', 'clinic_email')
+`;
