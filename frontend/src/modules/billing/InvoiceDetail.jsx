@@ -94,8 +94,8 @@ export default function InvoiceDetail() {
         </div>
       </div>
 
-      <div className="grid grid-cols-3 gap-6">
-        <div className="col-span-2 space-y-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="col-span-1 lg:col-span-2 space-y-6">
           <div className="bg-white rounded-lg shadow-sm border overflow-hidden">
             <div className="p-4 border-b bg-slate-50 flex justify-between items-center">
               <h3 className="font-bold text-slate-700 flex items-center gap-2">
@@ -108,8 +108,8 @@ export default function InvoiceDetail() {
               )}
             </div>
             <div>
-              <table className="w-full text-left">
-                <thead className="bg-slate-50 text-slate-500 text-sm">
+              <table className="w-full text-left block md:table">
+                <thead className="hidden md:table-header-group bg-slate-50 text-slate-500 text-sm">
                   <tr>
                     <th className="px-4 py-2">Descripción</th>
                     <th className="px-4 py-2 text-right">Cant.</th>
@@ -119,21 +119,37 @@ export default function InvoiceDetail() {
                     {isBorrador && <th className="px-4 py-2"></th>}
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100">
+                <tbody className="block md:table-row-group divide-y divide-slate-100">
                   {invoice.items.length === 0 ? (
-                    <tr><td colSpan={6} className="px-4 py-8 text-center text-slate-400">Sin ítems</td></tr>
+                    <tr className="block md:table-row"><td colSpan={6} className="px-4 py-8 text-center text-slate-400 block md:table-cell">Sin ítems</td></tr>
                   ) : (
                     invoice.items.map(item => (
-                      <tr key={item.id} className="hover:bg-slate-50">
-                        <td className="px-4 py-3">{item.description}</td>
-                        <td className="px-4 py-3 text-right">{parseFloat(item.quantity)}</td>
-                        <td className="px-4 py-3 text-right">${parseFloat(item.unit_price).toFixed(2)}</td>
-                        <td className="px-4 py-3 text-right text-red-500">{parseFloat(item.discount) > 0 ? `-$${parseFloat(item.discount).toFixed(2)}` : '-'}</td>
-                        <td className="px-4 py-3 text-right font-semibold">${parseFloat(item.subtotal).toFixed(2)}</td>
+                      <tr key={item.id} className="hover:bg-slate-50 block md:table-row border-b md:border-b-0 py-3 md:py-0 space-y-2 md:space-y-0">
+                        <td className="px-4 py-3 block md:table-cell flex justify-between items-center">
+                          <span className="md:hidden font-semibold text-slate-500">Descripción:</span>
+                          <span>{item.description}</span>
+                        </td>
+                        <td className="px-4 py-3 text-right block md:table-cell flex justify-between items-center">
+                          <span className="md:hidden font-semibold text-slate-500">Cant:</span>
+                          <span>{parseFloat(item.quantity)}</span>
+                        </td>
+                        <td className="px-4 py-3 text-right block md:table-cell flex justify-between items-center">
+                          <span className="md:hidden font-semibold text-slate-500">P. Unit:</span>
+                          <span>${parseFloat(item.unit_price).toFixed(2)}</span>
+                        </td>
+                        <td className="px-4 py-3 text-right text-red-500 block md:table-cell flex justify-between items-center">
+                          <span className="md:hidden font-semibold text-slate-500">Desc:</span>
+                          <span>{parseFloat(item.discount) > 0 ? `-$${parseFloat(item.discount).toFixed(2)}` : '-'}</span>
+                        </td>
+                        <td className="px-4 py-3 text-right font-semibold block md:table-cell flex justify-between items-center md:text-right">
+                          <span className="md:hidden font-semibold text-slate-500">Subtotal:</span>
+                          <span>${parseFloat(item.subtotal).toFixed(2)}</span>
+                        </td>
                         {isBorrador && (
-                          <td className="px-4 py-3 text-right">
+                          <td className="px-4 py-3 text-right block md:table-cell flex justify-between md:justify-end items-center border-t md:border-t-0 pt-2 md:pt-0">
+                            <span className="md:hidden font-semibold text-slate-500">Acciones:</span>
                             <button onClick={() => removeInvoiceItem.mutate({ invoiceId: id, itemId: item.id })} className="text-red-400 hover:text-red-600">
-                              <Trash2 className="w-4 h-4" />
+                              <Trash2 className="w-5 h-5" />
                             </button>
                           </td>
                         )}
@@ -143,8 +159,8 @@ export default function InvoiceDetail() {
                 </tbody>
               </table>
             </div>
-            <div className="bg-slate-50 p-4 border-t flex justify-end space-y-1">
-              <div className="w-64">
+            <div className="bg-slate-50 p-4 border-t flex justify-end">
+              <div className="w-full md:w-64">
                 <div className="flex justify-between text-slate-500">
                   <span>Subtotal:</span>
                   <span>${parseFloat(invoice.subtotal).toFixed(2)}</span>
@@ -173,8 +189,8 @@ export default function InvoiceDetail() {
               )}
             </div>
             <div className="p-0">
-              <table className="w-full text-left text-sm">
-                 <thead className="bg-slate-50 text-slate-500">
+              <table className="w-full text-left text-sm block md:table">
+                 <thead className="hidden md:table-header-group bg-slate-50 text-slate-500">
                    <tr>
                      <th className="px-4 py-2">Fecha</th>
                      <th className="px-4 py-2">Método</th>
@@ -182,23 +198,35 @@ export default function InvoiceDetail() {
                      <th className="px-4 py-2 text-right">Monto</th>
                    </tr>
                  </thead>
-                 <tbody className="divide-y divide-slate-100">
+                 <tbody className="block md:table-row-group divide-y divide-slate-100">
                    {invoice.payments.length === 0 ? (
-                     <tr><td colSpan={4} className="px-4 py-8 text-center text-slate-400">Sin pagos registrados</td></tr>
+                     <tr className="block md:table-row"><td colSpan={4} className="px-4 py-8 text-center text-slate-400 block md:table-cell">Sin pagos registrados</td></tr>
                    ) : (
                      invoice.payments.map(p => (
-                       <tr key={p.id}>
-                         <td className="px-4 py-3">{format(new Date(p.payment_date), 'dd/MM/yyyy HH:mm')}</td>
-                         <td className="px-4 py-3">{p.payment_method_name}</td>
-                         <td className="px-4 py-3 text-slate-500">{p.reference_number || '-'}</td>
-                         <td className="px-4 py-3 text-right font-bold text-emerald-600">${parseFloat(p.amount).toFixed(2)}</td>
+                       <tr key={p.id} className="block md:table-row border-b md:border-b-0 py-2.5 md:py-0 space-y-1.5 md:space-y-0">
+                         <td className="px-4 py-3 block md:table-cell flex justify-between items-center">
+                           <span className="md:hidden font-semibold text-slate-500">Fecha:</span>
+                           <span>{format(new Date(p.payment_date), 'dd/MM/yyyy HH:mm')}</span>
+                         </td>
+                         <td className="px-4 py-3 block md:table-cell flex justify-between items-center">
+                           <span className="md:hidden font-semibold text-slate-500">Método:</span>
+                           <span>{p.payment_method_name}</span>
+                         </td>
+                         <td className="px-4 py-3 text-slate-500 block md:table-cell flex justify-between items-center">
+                           <span className="md:hidden font-semibold text-slate-500">Ref:</span>
+                           <span>{p.reference_number || '-'}</span>
+                         </td>
+                         <td className="px-4 py-3 text-right font-bold text-emerald-600 block md:table-cell flex justify-between items-center md:text-right">
+                           <span className="md:hidden font-semibold text-slate-500">Monto:</span>
+                           <span>${parseFloat(p.amount).toFixed(2)}</span>
+                         </td>
                        </tr>
                      ))
                    )}
                  </tbody>
               </table>
               <div className="bg-slate-50 p-4 border-t flex justify-end">
-                <div className="w-64">
+                <div className="w-full md:w-64">
                    <div className="flex justify-between font-bold text-slate-700">
                       <span>Total Pagado:</span>
                       <span className="text-emerald-600">${totalPagado.toFixed(2)}</span>

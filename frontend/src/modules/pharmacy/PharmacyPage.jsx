@@ -87,8 +87,8 @@ function ProductsTab() {
       </div>
 
       <div className="bg-white rounded-lg border shadow-sm overflow-hidden">
-        <table className="min-w-full divide-y divide-slate-200">
-          <thead className="bg-slate-50">
+        <table className="min-w-full divide-y divide-slate-200 block md:table">
+          <thead className="hidden md:table-header-group bg-slate-50">
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Producto</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Categoría</th>
@@ -98,16 +98,17 @@ function ProductsTab() {
               <th className="px-6 py-3 text-center text-xs font-medium text-slate-500 uppercase tracking-wider">Acciones</th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-slate-200">
+          <tbody className="bg-white divide-y divide-slate-200 block md:table-row-group">
             {isLoading ? (
-              <tr><td colSpan="6" className="px-6 py-8 text-center text-slate-500">Cargando catálogo...</td></tr>
+              <tr className="block md:table-row"><td colSpan="6" className="px-6 py-8 text-center text-slate-500 block md:table-cell">Cargando catálogo...</td></tr>
             ) : products.length > 0 ? (
               products.map(p => {
                 const isLowStock = parseFloat(p.current_stock) <= parseFloat(p.min_stock_alert);
                 return (
-                  <tr key={p.id} className={`${isLowStock ? 'bg-red-50' : 'hover:bg-slate-50'}`}>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center">
+                  <tr key={p.id} className={`block md:table-row border-b md:border-b-0 py-3 md:py-0 space-y-2 md:space-y-0 ${isLowStock ? 'bg-red-50' : 'hover:bg-slate-50'}`}>
+                    <td className="px-6 py-4 block md:table-cell flex justify-between items-center">
+                      <span className="md:hidden font-semibold text-slate-500">Producto:</span>
+                      <div className="flex items-center text-right md:text-left">
                         <div>
                           <div className={`text-sm font-medium ${isLowStock ? 'text-red-800' : 'text-slate-900'}`}>{p.name}</div>
                           <div className="text-xs text-slate-500">SKU: {p.sku || 'N/A'}</div>
@@ -115,21 +116,26 @@ function ProductsTab() {
                         {p.has_active_alert && <AlertCircle className="w-4 h-4 text-amber-500 ml-2" title="Alerta Activa" />}
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
-                      {p.category_name || 'Sin categoría'}
+                    <td className="px-6 py-4 text-sm text-slate-500 block md:table-cell flex justify-between items-center">
+                      <span className="md:hidden font-semibold text-slate-500">Categoría:</span>
+                      <span>{p.category_name || 'Sin categoría'}</span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-center">
+                    <td className="px-6 py-4 text-center block md:table-cell flex justify-between items-center md:text-center">
+                      <span className="md:hidden font-semibold text-slate-500">Stock Actual:</span>
                       <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${isLowStock ? 'bg-red-100 text-red-800' : 'bg-emerald-100 text-emerald-800'}`}>
                         {p.current_stock}
                       </span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-center text-sm text-slate-500">
-                      {p.min_stock_alert}
+                    <td className="px-6 py-4 text-center text-sm text-slate-500 block md:table-cell flex justify-between items-center md:text-center">
+                      <span className="md:hidden font-semibold text-slate-500">Mínimo:</span>
+                      <span>{p.min_stock_alert}</span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm text-slate-700 font-medium">
-                      ${parseFloat(p.sale_price).toFixed(2)}
+                    <td className="px-6 py-4 text-right text-sm text-slate-700 font-medium block md:table-cell flex justify-between items-center md:text-right">
+                      <span className="md:hidden font-semibold text-slate-500">Precio:</span>
+                      <span>${parseFloat(p.sale_price).toFixed(2)}</span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
+                    <td className="px-6 py-4 text-center text-sm font-medium block md:table-cell flex justify-between md:justify-center items-center border-t md:border-t-0 pt-2 md:pt-0">
+                      <span className="md:hidden font-semibold text-slate-500">Acciones:</span>
                       <button 
                         onClick={() => setLotModalProduct(p)}
                         className="text-blue-600 hover:text-blue-900 bg-blue-50 hover:bg-blue-100 px-3 py-1 rounded transition"
@@ -141,7 +147,7 @@ function ProductsTab() {
                 );
               })
             ) : (
-              <tr><td colSpan="6" className="px-6 py-8 text-center text-slate-500">No se encontraron productos.</td></tr>
+              <tr className="block md:table-row"><td colSpan="6" className="px-6 py-8 text-center text-slate-500 block md:table-cell">No se encontraron productos.</td></tr>
             )}
           </tbody>
         </table>
@@ -158,8 +164,8 @@ function MovementsTab() {
   
   return (
     <div className="bg-white rounded-lg border shadow-sm overflow-hidden">
-      <table className="min-w-full divide-y divide-slate-200">
-        <thead className="bg-slate-50">
+      <table className="min-w-full divide-y divide-slate-200 block md:table">
+        <thead className="hidden md:table-header-group bg-slate-50">
           <tr>
             <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase">Fecha</th>
             <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase">Producto</th>
@@ -169,36 +175,42 @@ function MovementsTab() {
             <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase">Usuario</th>
           </tr>
         </thead>
-        <tbody className="bg-white divide-y divide-slate-200">
+        <tbody className="bg-white divide-y divide-slate-200 block md:table-row-group">
           {isLoading ? (
-            <tr><td colSpan="6" className="px-6 py-8 text-center text-slate-500">Cargando historial...</td></tr>
+            <tr className="block md:table-row"><td colSpan="6" className="px-6 py-8 text-center text-slate-500 block md:table-cell">Cargando historial...</td></tr>
           ) : movements.length > 0 ? (
             movements.map(m => (
-              <tr key={m.id} className="hover:bg-slate-50">
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
-                  {format(new Date(m.created_at), "dd/MM/yyyy HH:mm")}
+              <tr key={m.id} className="hover:bg-slate-50 block md:table-row border-b md:border-b-0 py-3 md:py-0 space-y-2 md:space-y-0">
+                <td className="px-6 py-4 text-sm text-slate-500 block md:table-cell flex justify-between items-center">
+                  <span className="md:hidden font-semibold text-slate-500">Fecha:</span>
+                  <span>{format(new Date(m.created_at), "dd/MM/yyyy HH:mm")}</span>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-slate-900">
-                  {m.product_name}
+                <td className="px-6 py-4 text-sm font-medium text-slate-900 block md:table-cell flex justify-between items-center">
+                  <span className="md:hidden font-semibold text-slate-500">Producto:</span>
+                  <span>{m.product_name}</span>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm">
+                <td className="px-6 py-4 text-sm block md:table-cell flex justify-between items-center">
+                  <span className="md:hidden font-semibold text-slate-500">Tipo:</span>
                   <span className={`px-2 py-1 rounded-full text-xs font-semibold ${m.movement_type === 'entrada' ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'}`}>
                     {m.movement_type.toUpperCase()}
                   </span>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-center text-sm text-slate-700 font-bold">
-                  {m.movement_type === 'entrada' ? '+' : '-'}{m.quantity}
+                <td className="px-6 py-4 text-center text-sm text-slate-700 font-bold block md:table-cell flex justify-between items-center md:text-center">
+                  <span className="md:hidden font-semibold text-slate-500">Cantidad:</span>
+                  <span>{m.movement_type === 'entrada' ? '+' : '-'}{m.quantity}</span>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-center text-sm text-slate-500">
-                  {m.stock_before} → {m.stock_after}
+                <td className="px-6 py-4 text-center text-sm text-slate-500 block md:table-cell flex justify-between items-center md:text-center">
+                  <span className="md:hidden font-semibold text-slate-500">Balance:</span>
+                  <span>{m.stock_before} → {m.stock_after}</span>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
-                  {m.performed_by_name || 'Sistema'}
+                <td className="px-6 py-4 text-sm text-slate-500 block md:table-cell flex justify-between items-center">
+                  <span className="md:hidden font-semibold text-slate-500">Usuario:</span>
+                  <span>{m.performed_by_name || 'Sistema'}</span>
                 </td>
               </tr>
             ))
           ) : (
-            <tr><td colSpan="6" className="px-6 py-8 text-center text-slate-500">No hay movimientos registrados.</td></tr>
+            <tr className="block md:table-row"><td colSpan="6" className="px-6 py-8 text-center text-slate-500 block md:table-cell">No hay movimientos registrados.</td></tr>
           )}
         </tbody>
       </table>

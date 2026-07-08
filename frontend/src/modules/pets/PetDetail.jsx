@@ -64,12 +64,12 @@ export default function PetDetail() {
       <Link to="/mascotas" className="text-slate-500 hover:text-slate-800 font-medium">← Volver</Link>
 
       {/* Header */}
-      <div className="bg-white p-6 rounded-lg shadow-sm border flex items-center space-x-6">
+      <div className="bg-white p-6 rounded-lg shadow-sm border flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-6 text-center md:text-left">
         <div className="w-20 h-20 rounded-full bg-gradient-to-br from-blue-100 to-indigo-200 flex items-center justify-center text-3xl shrink-0">🐾</div>
         <div className="flex-1">
           <h1 className="text-2xl font-bold text-slate-800">{pet.name}</h1>
           <p className="text-slate-500">{pet.species_name} {pet.breed_name ? `· ${pet.breed_name}` : ''} · {pet.gender}</p>
-          <div className="flex flex-wrap gap-4 mt-2 text-sm text-slate-600">
+          <div className="flex flex-wrap gap-4 mt-2 text-sm text-slate-600 justify-center md:justify-start">
             {pet.weight_kg && <span>Peso: {pet.weight_kg} kg</span>}
             {pet.color && <span>Color: {pet.color}</span>}
             {pet.is_neutered && <span className="text-green-600 font-medium">Esterilizado</span>}
@@ -78,7 +78,7 @@ export default function PetDetail() {
       </div>
 
       {/* Dueño */}
-      <div className="bg-white p-4 rounded-lg shadow-sm border">
+      <div className="bg-white p-4 rounded-lg shadow-sm border text-center md:text-left">
         <h2 className="text-sm font-semibold text-slate-500 mb-2">Dueño</h2>
         <Link to={`/clientes/${pet.client_id}`} className="text-blue-600 hover:underline font-medium">{pet.client_name}</Link>
         <div className="text-sm text-slate-500 mt-1">{pet.client_phone} {pet.client_email ? `· ${pet.client_email}` : ''}</div>
@@ -86,7 +86,7 @@ export default function PetDetail() {
 
       {/* Tabs */}
       <div className="bg-white rounded-lg shadow-sm border overflow-hidden">
-        <div className="flex border-b">
+        <div className="flex border-b overflow-x-auto">
           {tabs.map(t => (
             <button key={t.key} onClick={() => setActiveTab(t.key)}
               className={`flex-1 py-3 text-sm font-medium transition ${activeTab === t.key ? 'text-blue-600 border-b-2 border-blue-600 bg-blue-50' : 'text-slate-500 hover:text-slate-800'}`}>
