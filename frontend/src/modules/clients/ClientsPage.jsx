@@ -80,8 +80,8 @@ export default function ClientsPage() {
 
           <div className="bg-white rounded-lg shadow-sm border border-slate-200 overflow-hidden">
             <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse">
-                <thead className="bg-slate-50 border-b">
+              <table className="w-full text-left border-collapse block md:table">
+                <thead className="hidden md:table-header-group bg-slate-50 border-b">
                   <tr>
                     <th className="p-4 font-semibold text-slate-600 text-sm">Nombre</th>
                     <th className="p-4 font-semibold text-slate-600 text-sm">DNI</th>
@@ -91,10 +91,10 @@ export default function ClientsPage() {
                     <th className="p-4 font-semibold text-slate-600 text-sm text-right">Acciones</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100">
+                <tbody className="block md:table-row-group divide-y divide-slate-100">
                   {isLoading ? (
-                    <tr>
-                      <td colSpan="6" className="p-8 text-center text-slate-500">
+                    <tr className="block md:table-row">
+                      <td colSpan="6" className="p-8 text-center text-slate-500 block md:table-cell">
                         <div className="animate-pulse space-y-4">
                           <div className="h-4 bg-slate-200 rounded w-3/4 mx-auto"></div>
                           <div className="h-4 bg-slate-200 rounded w-1/2 mx-auto"></div>
@@ -102,32 +102,48 @@ export default function ClientsPage() {
                       </td>
                     </tr>
                   ) : isError ? (
-                    <tr>
-                      <td colSpan="6" className="p-8 text-center text-red-500">Error al cargar clientes</td>
+                    <tr className="block md:table-row">
+                      <td colSpan="6" className="p-8 text-center text-red-500 block md:table-cell">Error al cargar clientes</td>
                     </tr>
                   ) : data?.data?.length === 0 ? (
-                    <tr>
-                      <td colSpan="6" className="p-8 text-center text-slate-500">No se encontraron resultados</td>
+                    <tr className="block md:table-row">
+                      <td colSpan="6" className="p-8 text-center text-slate-500 block md:table-cell">No se encontraron resultados</td>
                     </tr>
                   ) : (
                     data?.data?.map(client => (
-                      <tr key={client.id} className="hover:bg-slate-50 transition">
-                        <td className="p-4 text-sm font-medium text-slate-800">
+                      <tr key={client.id} className="hover:bg-slate-50 transition block md:table-row border-b md:border-b-0 py-3 md:py-0 space-y-2 md:space-y-0">
+                        <td className="p-4 text-sm font-medium text-slate-800 block md:table-cell flex justify-between items-center">
+                          <span className="md:hidden font-semibold text-slate-500">Nombre:</span>
                           <Link to={`/clientes/${client.id}`} className="text-blue-600 hover:underline">
                             {client.full_name}
                           </Link>
                         </td>
-                        <td className="p-4 text-sm text-slate-600">{client.dni || '-'}</td>
-                        <td className="p-4 text-sm text-slate-600">{client.phone}</td>
-                        <td className="p-4 text-sm text-slate-600">{client.email || '-'}</td>
-                        <td className="p-4 text-sm text-slate-600">{client.district || '-'}</td>
-                        <td className="p-4 text-sm text-right space-x-3">
-                          {can('clients', 'write') && (
-                            <button onClick={() => handleEdit(client)} className="text-blue-600 hover:text-blue-800 font-medium">Editar</button>
-                          )}
-                          {can('clients', 'delete') && (
-                            <button onClick={() => handleDelete(client.id)} className="text-red-600 hover:text-red-800 font-medium">Eliminar</button>
-                          )}
+                        <td className="p-4 text-sm text-slate-600 block md:table-cell flex justify-between items-center">
+                          <span className="md:hidden font-semibold text-slate-500">DNI:</span>
+                          <span>{client.dni || '-'}</span>
+                        </td>
+                        <td className="p-4 text-sm text-slate-600 block md:table-cell flex justify-between items-center">
+                          <span className="md:hidden font-semibold text-slate-500">Teléfono:</span>
+                          <span>{client.phone}</span>
+                        </td>
+                        <td className="p-4 text-sm text-slate-600 block md:table-cell flex justify-between items-center">
+                          <span className="md:hidden font-semibold text-slate-500">Email:</span>
+                          <span>{client.email || '-'}</span>
+                        </td>
+                        <td className="p-4 text-sm text-slate-600 block md:table-cell flex justify-between items-center">
+                          <span className="md:hidden font-semibold text-slate-500">Distrito:</span>
+                          <span>{client.district || '-'}</span>
+                        </td>
+                        <td className="p-4 text-sm text-right space-x-3 block md:table-cell flex justify-between md:justify-end items-center border-t md:border-t-0 pt-2 md:pt-0">
+                          <span className="md:hidden font-semibold text-slate-500">Acciones:</span>
+                          <div className="space-x-3 flex items-center">
+                            {can('clients', 'write') && (
+                              <button onClick={() => handleEdit(client)} className="text-blue-600 hover:text-blue-800 font-medium">Editar</button>
+                            )}
+                            {can('clients', 'delete') && (
+                              <button onClick={() => handleDelete(client.id)} className="text-red-600 hover:text-red-800 font-medium">Eliminar</button>
+                            )}
+                          </div>
                         </td>
                       </tr>
                     ))

@@ -116,8 +116,8 @@ export default function BillingPage() {
           </div>
           
           <div>
-            <table className="w-full text-left">
-              <thead className="bg-slate-50 text-slate-500 text-sm">
+            <table className="w-full text-left block md:table">
+              <thead className="hidden md:table-header-group bg-slate-50 text-slate-500 text-sm">
                 <tr>
                   <th className="px-6 py-3 font-semibold">Número</th>
                   <th className="px-6 py-3 font-semibold">Cliente</th>
@@ -127,29 +127,39 @@ export default function BillingPage() {
                   <th className="px-6 py-3 font-semibold text-right">Acciones</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
+              <tbody className="block md:table-row-group divide-y divide-slate-100">
                 {isLoading ? (
-                  <tr><td colSpan={6} className="px-6 py-8 text-center text-slate-500">Cargando...</td></tr>
+                  <tr className="block md:table-row"><td colSpan={6} className="px-6 py-8 text-center text-slate-500 block md:table-cell">Cargando...</td></tr>
                 ) : filteredInvoices.length === 0 ? (
-                  <tr><td colSpan={6} className="px-6 py-8 text-center text-slate-500">No se encontraron facturas.</td></tr>
+                  <tr className="block md:table-row"><td colSpan={6} className="px-6 py-8 text-center text-slate-500 block md:table-cell">No se encontraron facturas.</td></tr>
                 ) : (
                   filteredInvoices.map(inv => (
-                    <tr key={inv.id} className="hover:bg-slate-50 transition">
-                      <td className="px-6 py-4 font-semibold text-slate-700">{inv.invoice_number || 'Borrador'}</td>
-                      <td className="px-6 py-4">
-                        <div className="font-medium text-slate-800">{inv.client_name}</div>
-                        {inv.pet_name && <div className="text-sm text-slate-500">Mascota: {inv.pet_name}</div>}
+                    <tr key={inv.id} className="hover:bg-slate-50 transition block md:table-row border-b md:border-b-0 py-3 md:py-0 space-y-2 md:space-y-0">
+                      <td className="px-6 py-4 font-semibold text-slate-700 block md:table-cell flex justify-between items-center">
+                        <span className="md:hidden font-semibold text-slate-500">Número:</span>
+                        <span>{inv.invoice_number || 'Borrador'}</span>
                       </td>
-                      <td className="px-6 py-4 text-slate-600">
-                        {format(new Date(inv.issue_date), 'dd MMM yyyy', { locale: es })}
+                      <td className="px-6 py-4 block md:table-cell flex justify-between items-center">
+                        <span className="md:hidden font-semibold text-slate-500">Cliente:</span>
+                        <div className="text-right md:text-left">
+                          <div className="font-medium text-slate-800">{inv.client_name}</div>
+                          {inv.pet_name && <div className="text-sm text-slate-500">Mascota: {inv.pet_name}</div>}
+                        </div>
                       </td>
-                      <td className="px-6 py-4 text-right font-bold text-slate-800">
-                        ${parseFloat(inv.total).toFixed(2)}
+                      <td className="px-6 py-4 text-slate-600 block md:table-cell flex justify-between items-center">
+                        <span className="md:hidden font-semibold text-slate-500">Fecha Emisión:</span>
+                        <span>{format(new Date(inv.issue_date), 'dd MMM yyyy', { locale: es })}</span>
                       </td>
-                      <td className="px-6 py-4 text-center">
-                        {getStatusBadge(inv.status)}
+                      <td className="px-6 py-4 text-right font-bold text-slate-800 block md:table-cell flex justify-between items-center">
+                        <span className="md:hidden font-semibold text-slate-500">Total:</span>
+                        <span>${parseFloat(inv.total).toFixed(2)}</span>
                       </td>
-                      <td className="px-6 py-4 text-right">
+                      <td className="px-6 py-4 text-center block md:table-cell flex justify-between items-center">
+                        <span className="md:hidden font-semibold text-slate-500">Estado:</span>
+                        <span>{getStatusBadge(inv.status)}</span>
+                      </td>
+                      <td className="px-6 py-4 text-right block md:table-cell flex justify-between md:justify-end items-center border-t md:border-t-0 pt-2 md:pt-0">
+                        <span className="md:hidden font-semibold text-slate-500">Acciones:</span>
                         <div className="flex items-center justify-end gap-1">
                           <button 
                             onClick={() => navigate(`/facturacion/${inv.id}`)}

@@ -131,18 +131,23 @@ export default function GroomingSessionDetail() {
           
           <div className="p-0">
             {session.services.length > 0 ? (
-              <table className="min-w-full divide-y divide-slate-200">
-                <tbody className="bg-white divide-y divide-slate-100">
+              <table className="min-w-full divide-y divide-slate-200 block md:table">
+                <tbody className="bg-white divide-y divide-slate-100 block md:table-row-group">
                   {session.services.map(s => (
-                    <tr key={s.id} className="hover:bg-slate-50">
-                      <td className="px-6 py-4">
-                        <div className="font-medium text-slate-800">{s.service_name}</div>
-                        {s.notes && <div className="text-sm text-slate-500 mt-1">{s.notes}</div>}
+                    <tr key={s.id} className="hover:bg-slate-50 block md:table-row border-b md:border-b-0 py-2.5 md:py-0 space-y-1.5 md:space-y-0">
+                      <td className="px-6 py-4 block md:table-cell flex justify-between items-center">
+                        <span className="md:hidden font-semibold text-slate-500">Servicio:</span>
+                        <div className="text-right md:text-left">
+                          <div className="font-medium text-slate-800">{s.service_name}</div>
+                          {s.notes && <div className="text-sm text-slate-500 mt-1">{s.notes}</div>}
+                        </div>
                       </td>
-                      <td className="px-6 py-4 text-right font-semibold text-slate-700">
-                        ${parseFloat(s.price_charged).toFixed(2)}
+                      <td className="px-6 py-4 text-right font-semibold text-slate-700 block md:table-cell flex justify-between items-center md:text-right">
+                        <span className="md:hidden font-semibold text-slate-500">Precio:</span>
+                        <span>${parseFloat(s.price_charged).toFixed(2)}</span>
                       </td>
-                      <td className="px-6 py-4 text-right w-20">
+                      <td className="px-6 py-4 text-right w-full md:w-20 block md:table-cell flex justify-between md:justify-end items-center border-t md:border-t-0 pt-2 md:pt-0">
+                        <span className="md:hidden font-semibold text-slate-500">Acción:</span>
                         {!isCompleted && (
                           <button onClick={() => handleRemoveService(s.id)} className="text-red-400 hover:text-red-600 p-1">
                             <Trash2 className="w-4 h-4" />
@@ -151,12 +156,16 @@ export default function GroomingSessionDetail() {
                       </td>
                     </tr>
                   ))}
-                  <tr className="bg-slate-50">
-                    <td className="px-6 py-4 text-right font-bold text-slate-700 uppercase">Total</td>
-                    <td className="px-6 py-4 text-right font-bold text-slate-900 text-lg">
-                      ${isCompleted ? parseFloat(session.total_amount).toFixed(2) : currentTotal.toFixed(2)}
+                  <tr className="bg-slate-50 block md:table-row border-t font-bold">
+                    <td className="px-6 py-4 text-right font-bold text-slate-700 uppercase block md:table-cell flex justify-between items-center">
+                      <span className="md:hidden">Concepto:</span>
+                      <span>Total</span>
                     </td>
-                    <td></td>
+                    <td className="px-6 py-4 text-right font-bold text-slate-900 text-lg block md:table-cell flex justify-between items-center md:text-right">
+                      <span className="md:hidden">Monto:</span>
+                      <span>${isCompleted ? parseFloat(session.total_amount).toFixed(2) : currentTotal.toFixed(2)}</span>
+                    </td>
+                    <td className="block md:table-cell"></td>
                   </tr>
                 </tbody>
               </table>

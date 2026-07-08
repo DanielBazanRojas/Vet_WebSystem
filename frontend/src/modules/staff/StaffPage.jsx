@@ -152,8 +152,8 @@ export default function StaffPage() {
 
       <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse">
-            <thead className="bg-slate-50 border-b border-slate-200">
+          <table className="w-full text-left border-collapse block md:table">
+            <thead className="hidden md:table-header-group bg-slate-50 border-b border-slate-200">
               <tr>
                 <th className="p-4 font-semibold text-slate-700 text-xs uppercase tracking-wider">Nombre</th>
                 <th className="p-4 font-semibold text-slate-700 text-xs uppercase tracking-wider">Email</th>
@@ -163,10 +163,10 @@ export default function StaffPage() {
                 <th className="p-4 font-semibold text-slate-700 text-xs uppercase tracking-wider text-right">Acciones</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
+            <tbody className="block md:table-row-group divide-y divide-slate-100">
               {isLoading ? (
-                <tr>
-                  <td colSpan="6" className="p-8 text-center text-slate-500">
+                <tr className="block md:table-row">
+                  <td colSpan="6" className="p-8 text-center text-slate-500 block md:table-cell">
                     <div className="animate-pulse space-y-4">
                       <div className="h-4 bg-slate-100 rounded w-3/4 mx-auto"></div>
                       <div className="h-4 bg-slate-100 rounded w-1/2 mx-auto"></div>
@@ -174,53 +174,71 @@ export default function StaffPage() {
                   </td>
                 </tr>
               ) : isError ? (
-                <tr>
-                  <td colSpan="6" className="p-8 text-center text-red-500 font-medium">Error al cargar el personal del sistema</td>
+                <tr className="block md:table-row">
+                  <td colSpan="6" className="p-8 text-center text-red-500 font-medium block md:table-cell">Error al cargar el personal del sistema</td>
                 </tr>
               ) : data?.data?.length === 0 ? (
-                <tr>
-                  <td colSpan="6" className="p-8 text-center text-slate-400 font-medium">No se encontraron resultados</td>
+                <tr className="block md:table-row">
+                  <td colSpan="6" className="p-8 text-center text-slate-400 font-medium block md:table-cell">No se encontraron resultados</td>
                 </tr>
               ) : (
                 data?.data?.map(staff => (
-                  <tr key={staff.id} className="hover:bg-slate-50 transition">
-                    <td className="p-4 text-sm font-semibold text-slate-800">{staff.full_name}</td>
-                    <td className="p-4 text-sm text-slate-600">{staff.email}</td>
-                    <td className="p-4 text-sm text-slate-600">{staff.phone || '-'}</td>
-                    <td className="p-4 text-sm">{getRoleBadge(staff.role_name)}</td>
-                    <td className="p-4 text-sm">{getStatusBadge(staff.is_active)}</td>
-                    <td className="p-4 text-sm text-right space-x-2">
-                      {can('usuarios', 'editar') && (
-                        <button 
-                          onClick={() => handleEdit(staff)} 
-                          title="Editar usuario"
-                          className="p-1.5 text-blue-600 hover:bg-blue-50 hover:text-blue-800 rounded-lg transition inline-flex items-center justify-center border border-transparent hover:border-blue-100"
-                        >
-                          <Edit className="w-4 h-4" />
-                        </button>
-                      )}
-                      {can('usuarios', 'editar') && (
-                        <button 
-                          onClick={() => setResetPasswordStaff(staff)} 
-                          title="Restablecer contraseña"
-                          className="p-1.5 text-amber-600 hover:bg-amber-50 hover:text-amber-800 rounded-lg transition inline-flex items-center justify-center border border-transparent hover:border-amber-100"
-                        >
-                          <Key className="w-4 h-4" />
-                        </button>
-                      )}
-                      {can('usuarios', 'eliminar') && staff.role_name !== 'admin' && (
-                        <button 
-                          onClick={() => handleToggleActive(staff)} 
-                          title={staff.is_active ? "Desactivar cuenta" : "Activar cuenta"}
-                          className={`p-1.5 rounded-lg transition inline-flex items-center justify-center border border-transparent ${
-                            staff.is_active 
-                              ? 'text-red-600 hover:bg-red-50 hover:text-red-800 hover:border-red-100' 
-                              : 'text-emerald-600 hover:bg-emerald-50 hover:text-emerald-800 hover:border-emerald-100'
-                          }`}
-                        >
-                          {staff.is_active ? <UserX className="w-4 h-4" /> : <UserCheck className="w-4 h-4" />}
-                        </button>
-                      )}
+                  <tr key={staff.id} className="hover:bg-slate-50 transition block md:table-row border-b md:border-b-0 py-3 md:py-0 space-y-2 md:space-y-0">
+                    <td className="p-4 text-sm font-semibold text-slate-800 block md:table-cell flex justify-between items-center">
+                      <span className="md:hidden font-semibold text-slate-500">Nombre:</span>
+                      <span>{staff.full_name}</span>
+                    </td>
+                    <td className="p-4 text-sm text-slate-600 block md:table-cell flex justify-between items-center">
+                      <span className="md:hidden font-semibold text-slate-500">Email:</span>
+                      <span>{staff.email}</span>
+                    </td>
+                    <td className="p-4 text-sm text-slate-600 block md:table-cell flex justify-between items-center">
+                      <span className="md:hidden font-semibold text-slate-500">Teléfono:</span>
+                      <span>{staff.phone || '-'}</span>
+                    </td>
+                    <td className="p-4 text-sm block md:table-cell flex justify-between items-center">
+                      <span className="md:hidden font-semibold text-slate-500">Rol Asignado:</span>
+                      <span>{getRoleBadge(staff.role_name)}</span>
+                    </td>
+                    <td className="p-4 text-sm block md:table-cell flex justify-between items-center">
+                      <span className="md:hidden font-semibold text-slate-500">Estado:</span>
+                      <span>{getStatusBadge(staff.is_active)}</span>
+                    </td>
+                    <td className="p-4 text-sm text-right space-x-2 block md:table-cell flex justify-between md:justify-end items-center border-t md:border-t-0 pt-2 md:pt-0">
+                      <span className="md:hidden font-semibold text-slate-500">Acciones:</span>
+                      <div className="space-x-2 flex items-center">
+                        {can('usuarios', 'editar') && (
+                          <button 
+                            onClick={() => handleEdit(staff)} 
+                            title="Editar usuario"
+                            className="p-1.5 text-blue-600 hover:bg-blue-50 hover:text-blue-800 rounded-lg transition inline-flex items-center justify-center border border-transparent hover:border-blue-100"
+                          >
+                            <Edit className="w-4 h-4" />
+                          </button>
+                        )}
+                        {can('usuarios', 'editar') && (
+                          <button 
+                            onClick={() => setResetPasswordStaff(staff)} 
+                            title="Restablecer contraseña"
+                            className="p-1.5 text-amber-600 hover:bg-amber-50 hover:text-amber-800 rounded-lg transition inline-flex items-center justify-center border border-transparent hover:border-amber-100"
+                          >
+                            <Key className="w-4 h-4" />
+                          </button>
+                        )}
+                        {can('usuarios', 'eliminar') && staff.role_name !== 'admin' && (
+                          <button 
+                            onClick={() => handleToggleActive(staff)} 
+                            title={staff.is_active ? "Desactivar cuenta" : "Activar cuenta"}
+                            className={`p-1.5 rounded-lg transition inline-flex items-center justify-center border border-transparent ${
+                              staff.is_active 
+                                ? 'text-red-600 hover:bg-red-50 hover:text-red-800 hover:border-red-100' 
+                                : 'text-emerald-600 hover:bg-emerald-50 hover:text-emerald-800 hover:border-emerald-100'
+                            }`}
+                          >
+                            {staff.is_active ? <UserX className="w-4 h-4" /> : <UserCheck className="w-4 h-4" />}
+                          </button>
+                        )}
+                      </div>
                     </td>
                   </tr>
                 ))
