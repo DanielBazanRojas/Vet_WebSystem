@@ -296,7 +296,7 @@ function AddItemModal({ invoiceId, onClose }) {
 
   return (
     <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999 }}>
-      <div style={{ backgroundColor: 'white', borderRadius: '8px', padding: '24px', width: '400px' }}>
+      <div className="bg-white rounded-lg p-6 w-full max-w-[400px]">
         <h3 className="font-bold text-lg mb-4 border-b pb-2">Agregar Ítem</h3>
         <form onSubmit={handleSubmit} className="space-y-4">
            <div>
@@ -352,7 +352,7 @@ function AddPaymentModal({ invoiceId, maxAmount, onClose }) {
 
   return (
     <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999 }}>
-      <div style={{ backgroundColor: 'white', borderRadius: '8px', padding: '24px', width: '400px' }}>
+      <div className="bg-white rounded-lg p-6 w-full max-w-[400px]">
         <h3 className="font-bold text-lg mb-4 border-b pb-2">Registrar Pago</h3>
         <form onSubmit={handleSubmit} className="space-y-4">
            <div>

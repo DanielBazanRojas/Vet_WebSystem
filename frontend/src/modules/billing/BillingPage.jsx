@@ -89,7 +89,7 @@ export default function BillingPage() {
       </div>
 
       {activeTab === 'facturas' && (
-        <div className="bg-white rounded-lg shadow-sm border overflow-hidden">
+        <div className="bg-gray-50 md:bg-white rounded-lg shadow-sm border overflow-hidden">
           <div className="p-4 border-b bg-slate-50 flex gap-4">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
@@ -134,31 +134,31 @@ export default function BillingPage() {
                   <tr className="block md:table-row"><td colSpan={6} className="px-6 py-8 text-center text-slate-500 block md:table-cell">No se encontraron facturas.</td></tr>
                 ) : (
                   filteredInvoices.map(inv => (
-                    <tr key={inv.id} className="hover:bg-slate-50 transition block md:table-row border-b md:border-b-0 py-3 md:py-0 space-y-2 md:space-y-0">
-                      <td className="px-6 py-4 font-semibold text-slate-700 block md:table-cell flex justify-between items-center">
+                    <tr key={inv.id} className="bg-white rounded-xl border border-gray-200 shadow-sm hover:bg-slate-50 transition block md:table-row md:bg-transparent md:rounded-none md:border-0 md:shadow-none py-5 md:py-0 space-y-2 md:space-y-0 mb-4 md:mb-0">
+                      <td className="px-5 py-3 font-semibold text-slate-700 block md:table-cell flex justify-between items-center border-b border-gray-100 md:px-6 md:py-4 md:border-b-0">
                         <span className="md:hidden font-semibold text-slate-500">Número:</span>
                         <span>{inv.invoice_number || 'Borrador'}</span>
                       </td>
-                      <td className="px-6 py-4 block md:table-cell flex justify-between items-center">
+                      <td className="px-5 py-3 block md:table-cell flex justify-between items-center border-b border-gray-100 md:px-6 md:py-4 md:border-b-0">
                         <span className="md:hidden font-semibold text-slate-500">Cliente:</span>
                         <div className="text-right md:text-left">
                           <div className="font-medium text-slate-800">{inv.client_name}</div>
                           {inv.pet_name && <div className="text-sm text-slate-500">Mascota: {inv.pet_name}</div>}
                         </div>
                       </td>
-                      <td className="px-6 py-4 text-slate-600 block md:table-cell flex justify-between items-center">
+                      <td className="px-5 py-3 text-slate-600 block md:table-cell flex justify-between items-center border-b border-gray-100 md:px-6 md:py-4 md:border-b-0">
                         <span className="md:hidden font-semibold text-slate-500">Fecha Emisión:</span>
                         <span>{format(new Date(inv.issue_date), 'dd MMM yyyy', { locale: es })}</span>
                       </td>
-                      <td className="px-6 py-4 text-right font-bold text-slate-800 block md:table-cell flex justify-between items-center">
+                      <td className="px-5 py-3 text-right font-bold text-slate-800 block md:table-cell flex justify-between items-center border-b border-gray-100 md:px-6 md:py-4 md:border-b-0">
                         <span className="md:hidden font-semibold text-slate-500">Total:</span>
                         <span>${parseFloat(inv.total).toFixed(2)}</span>
                       </td>
-                      <td className="px-6 py-4 text-center block md:table-cell flex justify-between items-center">
+                      <td className="px-5 py-3 text-center block md:table-cell flex justify-between items-center md:px-6 md:py-4">
                         <span className="md:hidden font-semibold text-slate-500">Estado:</span>
                         <span>{getStatusBadge(inv.status)}</span>
                       </td>
-                      <td className="px-6 py-4 text-right block md:table-cell flex justify-between md:justify-end items-center border-t md:border-t-0 pt-2 md:pt-0">
+                      <td className="px-6 py-4 text-right block md:table-cell flex justify-between md:justify-end items-center border-t border-gray-200 pt-3 mt-2 md:border-t-0 md:pt-0 md:mt-0">
                         <span className="md:hidden font-semibold text-slate-500">Acciones:</span>
                         <div className="flex items-center justify-end gap-1">
                           <button 

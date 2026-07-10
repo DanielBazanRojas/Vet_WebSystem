@@ -51,7 +51,7 @@ export default function ReportsPage() {
         </select>
       </div>
 
-      <div className="grid grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         <div className="bg-white p-6 rounded-lg shadow-sm border flex items-center gap-4">
           <div className="p-4 bg-emerald-100 rounded-full text-emerald-600"><DollarSign className="w-8 h-8"/></div>
           <div>

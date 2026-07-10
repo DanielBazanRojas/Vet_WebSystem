@@ -150,7 +150,7 @@ export default function StaffPage() {
         />
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+      <div className="bg-gray-50 md:bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse block md:table">
             <thead className="hidden md:table-header-group bg-slate-50 border-b border-slate-200">
@@ -183,28 +183,28 @@ export default function StaffPage() {
                 </tr>
               ) : (
                 data?.data?.map(staff => (
-                  <tr key={staff.id} className="hover:bg-slate-50 transition block md:table-row border-b md:border-b-0 py-3 md:py-0 space-y-2 md:space-y-0">
-                    <td className="p-4 text-sm font-semibold text-slate-800 block md:table-cell flex justify-between items-center">
+                  <tr key={staff.id} className="bg-white rounded-xl border border-gray-200 shadow-sm hover:bg-slate-50 transition block md:table-row md:bg-transparent md:rounded-none md:border-0 md:shadow-none py-5 md:py-0 space-y-2 md:space-y-0 mb-4 md:mb-0">
+                    <td className="px-5 py-3 text-sm font-semibold text-slate-800 block md:table-cell flex justify-between items-center border-b border-gray-100 md:p-4 md:border-b-0">
                       <span className="md:hidden font-semibold text-slate-500">Nombre:</span>
                       <span>{staff.full_name}</span>
                     </td>
-                    <td className="p-4 text-sm text-slate-600 block md:table-cell flex justify-between items-center">
+                    <td className="px-5 py-3 text-sm text-slate-600 block md:table-cell flex justify-between items-center border-b border-gray-100 md:p-4 md:border-b-0">
                       <span className="md:hidden font-semibold text-slate-500">Email:</span>
                       <span>{staff.email}</span>
                     </td>
-                    <td className="p-4 text-sm text-slate-600 block md:table-cell flex justify-between items-center">
+                    <td className="px-5 py-3 text-sm text-slate-600 block md:table-cell flex justify-between items-center border-b border-gray-100 md:p-4 md:border-b-0">
                       <span className="md:hidden font-semibold text-slate-500">Teléfono:</span>
                       <span>{staff.phone || '-'}</span>
                     </td>
-                    <td className="p-4 text-sm block md:table-cell flex justify-between items-center">
+                    <td className="px-5 py-3 text-sm block md:table-cell flex justify-between items-center border-b border-gray-100 md:p-4 md:border-b-0">
                       <span className="md:hidden font-semibold text-slate-500">Rol Asignado:</span>
                       <span>{getRoleBadge(staff.role_name)}</span>
                     </td>
-                    <td className="p-4 text-sm block md:table-cell flex justify-between items-center">
+                    <td className="px-5 py-3 text-sm block md:table-cell flex justify-between items-center md:p-4">
                       <span className="md:hidden font-semibold text-slate-500">Estado:</span>
                       <span>{getStatusBadge(staff.is_active)}</span>
                     </td>
-                    <td className="p-4 text-sm text-right space-x-2 block md:table-cell flex justify-between md:justify-end items-center border-t md:border-t-0 pt-2 md:pt-0">
+                    <td className="p-4 text-sm text-right space-x-2 block md:table-cell flex justify-between md:justify-end items-center border-t border-gray-200 pt-3 mt-2 md:border-t-0 md:pt-0 md:mt-0">
                       <span className="md:hidden font-semibold text-slate-500">Acciones:</span>
                       <div className="space-x-2 flex items-center">
                         {can('usuarios', 'editar') && (
