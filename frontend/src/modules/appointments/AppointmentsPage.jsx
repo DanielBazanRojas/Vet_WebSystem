@@ -254,7 +254,7 @@ export default function AppointmentsPage() {
       </div>
 
       {/* List View */}
-      <div className="bg-white rounded-lg shadow-sm border p-4">
+      <div className="bg-gray-50 md:bg-white rounded-lg shadow-sm border p-4">
         <h2 className="text-lg font-bold text-slate-800 mb-4 border-b pb-2">
           Listado de Citas (Semana actual)
         </h2>
@@ -276,38 +276,38 @@ export default function AppointmentsPage() {
               </thead>
               <tbody className="block md:table-row-group divide-y divide-slate-100">
                 {appointments.map(appt => (
-                  <tr key={appt.id} className="block md:table-row hover:bg-slate-50 transition border-b md:border-b-0 py-3 md:py-0 space-y-2 md:space-y-0">
-                    <td className="p-3 text-slate-800 font-medium whitespace-nowrap block md:table-cell flex justify-between items-center">
+                  <tr key={appt.id} className="bg-white rounded-xl border border-gray-200 shadow-sm block md:table-row hover:bg-slate-50 transition md:bg-transparent md:rounded-none md:border-0 md:shadow-none py-5 md:py-0 space-y-2 md:space-y-0 mb-4 md:mb-0">
+                    <td className="px-5 py-3 text-slate-800 font-medium whitespace-nowrap block md:table-cell flex justify-between items-center border-b border-gray-100 md:p-3 md:border-b-0">
                       <span className="md:hidden font-semibold text-slate-500">Fecha y Hora:</span>
                       <div className="text-right md:text-left">
                         {format(parse(appt.scheduled_date.substring(0, 10), 'yyyy-MM-dd', new Date()), 'dd MMM yyyy', { locale: es })} <br />
                         <span className="text-xs text-slate-500">{appt.scheduled_time.substring(0, 5)} ({appt.duration_min} min)</span>
                       </div>
                     </td>
-                    <td className="p-3 font-medium text-slate-800 block md:table-cell flex justify-between items-center">
+                    <td className="px-5 py-3 font-medium text-slate-800 block md:table-cell flex justify-between items-center border-b border-gray-100 md:p-3 md:border-b-0">
                       <span className="md:hidden font-semibold text-slate-500">Mascota:</span>
                       <span>{appt.pet_name}</span>
                     </td>
-                    <td className="p-3 text-slate-600 block md:table-cell flex justify-between items-center">
+                    <td className="px-5 py-3 text-slate-600 block md:table-cell flex justify-between items-center border-b border-gray-100 md:p-3 md:border-b-0">
                       <span className="md:hidden font-semibold text-slate-500">Dueño:</span>
                       <div className="text-right md:text-left">
                         {appt.client_name}<br />
                         <span className="text-xs text-slate-400">{appt.client_phone}</span>
                       </div>
                     </td>
-                    <td className="p-3 text-slate-600 block md:table-cell flex justify-between items-center">
+                    <td className="px-5 py-3 text-slate-600 block md:table-cell flex justify-between items-center border-b border-gray-100 md:p-3 md:border-b-0">
                       <span className="md:hidden font-semibold text-slate-500">Motivo/Tipo:</span>
                       <span className="inline-block px-2 py-1 rounded text-xs border" style={{ borderColor: appt.color_hex, color: appt.color_hex }}>
                         {appt.type_name}
                       </span>
                     </td>
-                    <td className="p-3 block md:table-cell flex justify-between items-center">
+                    <td className="px-5 py-3 block md:table-cell flex justify-between items-center md:p-3">
                       <span className="md:hidden font-semibold text-slate-500">Estado:</span>
                       <span className="px-2 py-1 rounded-full border text-xs font-medium bg-slate-100 uppercase">
                         {appt.status.replace('_', ' ')}
                       </span>
                     </td>
-                    <td className="p-3 text-right block md:table-cell flex justify-between md:justify-end items-center border-t md:border-t-0 pt-2 md:pt-0">
+                    <td className="p-3 text-right block md:table-cell flex justify-between md:justify-end items-center border-t border-gray-200 pt-3 mt-2 md:border-t-0 md:pt-0 md:mt-0">
                       <span className="md:hidden font-semibold text-slate-500">Acciones:</span>
                       <button
                         onClick={() => { setSelectedAppt(appt); setIsFormOpen(true); }}
