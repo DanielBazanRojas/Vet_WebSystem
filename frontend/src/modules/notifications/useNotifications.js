@@ -5,7 +5,8 @@ export const useUnreadNotifications = () => {
   return useQuery({
     queryKey: ['notifications-unread'],
     queryFn: api.getUnread,
-    refetchInterval: 15000,
+    refetchInterval: 60000,
+    retry: false,
   });
 };
 

@@ -15,6 +15,7 @@ import billingRoutes from './src/modules/billing/billing.routes.js';
 import dashboardRoutes from './src/modules/dashboard/dashboard.routes.js';
 import notificationsRoutes from './src/modules/notifications/notifications.routes.js';
 import staffRoutes from './src/modules/staff/staff.routes.js';
+import feedbackRoutes from './src/modules/feedback/feedback.routes.js';
 
 const app = express();
 
@@ -25,7 +26,7 @@ app.use(express.json());
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 100,
+  max: 500,
 });
 app.use(limiter);
 
@@ -44,5 +45,6 @@ app.use('/api/billing', billingRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/notifications', notificationsRoutes);
 app.use('/api/staff', staffRoutes);
+app.use('/api/feedback', feedbackRoutes);
 
 export default app;
