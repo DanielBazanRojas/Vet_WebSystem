@@ -22,6 +22,7 @@ import BillingPage from './modules/billing/BillingPage';
 import InvoiceDetail from './modules/billing/InvoiceDetail';
 import DashboardPage from './modules/dashboard/DashboardPage';
 import StaffPage from './modules/staff/StaffPage';
+import FeedbackPage from './modules/feedback/FeedbackPage';
 
 const queryClient = new QueryClient();
 
@@ -93,6 +94,9 @@ function App() {
               <Route element={<PermissionRoute module="usuarios" action="ver" />}>
                 <Route path="/personal" element={<StaffPage />} />
               </Route>
+
+              {/* Feedback - todos los usuarios staff */}
+              <Route path="/feedback" element={<FeedbackPage />} />
             </Route>
           </Route>
         </Routes>
