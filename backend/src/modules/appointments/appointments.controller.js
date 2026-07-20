@@ -2,8 +2,8 @@ import * as appointmentsService from './appointments.service.js';
 
 export const listAppointments = async (req, res) => {
   try {
-    const { date, assigned_to, status, category } = req.query;
-    const result = await appointmentsService.listAppointments({ date, assigned_to, status, category });
+    const { date_from, date_to, assigned_to, status, category } = req.query;
+    const result = await appointmentsService.listAppointments({ date_from, date_to, assigned_to, status, category });
     res.json(result);
   } catch (error) {
     console.error('Error listAppointments:', error);

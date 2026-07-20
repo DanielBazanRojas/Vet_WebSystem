@@ -1,12 +1,13 @@
 import { query } from '../../config/db.js';
 import * as Q from './appointments.queries.js';
 
-export const listAppointments = async ({ date, assigned_to, status, category }) => {
+export const listAppointments = async ({ date_from, date_to, assigned_to, status, category }) => {
   const res = await query(Q.LIST_APPOINTMENTS, [
-    date || null,
+    date_from || null,
     assigned_to || null,
     status || null,
-    category || null
+    category || null,
+    date_to || null,
   ]);
   return res.rows;
 };

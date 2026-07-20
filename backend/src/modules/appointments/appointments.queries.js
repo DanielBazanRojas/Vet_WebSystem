@@ -10,7 +10,8 @@ export const LIST_APPOINTMENTS = `
   JOIN appointment_types t ON a.appointment_type_id = t.id
   LEFT JOIN users u ON a.assigned_to = u.id
   WHERE a.deleted_at IS NULL
-    AND ($1::date IS NULL OR a.scheduled_date = $1)
+    AND a.scheduled_date >= COALESCE($1::date, date_trunc('week', CURRENT_DATE)::date)
+    AND a.scheduled_date <= COALESCE($5::date, date_trunc('week', CURRENT_DATE)::date + 5)
     AND ($2::uuid IS NULL OR a.assigned_to = $2)
     AND ($3::text IS NULL OR a.status = $3::appointment_status)
     AND ($4::text IS NULL OR t.category = $4)
