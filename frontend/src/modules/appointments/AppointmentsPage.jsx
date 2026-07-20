@@ -28,8 +28,12 @@ export default function AppointmentsPage() {
   const updateMutation = useUpdateAppointment();
   const cancelMutation = useCancelAppointment();
 
-  // Fetch appointments
+  // Fetch appointments for the visible week
+  const weekStartStr = format(currentWeekStart, 'yyyy-MM-dd');
+  const weekEndStr = format(addDays(currentWeekStart, 5), 'yyyy-MM-dd');
   const { data: appointments = [], isLoading } = useAppointments({
+    date_from: weekStartStr,
+    date_to: weekEndStr,
     assigned_to: selectedStaff || undefined,
   });
 
@@ -256,7 +260,7 @@ export default function AppointmentsPage() {
       {/* List View */}
       <div className="bg-gray-50 md:bg-white rounded-lg shadow-sm border p-4">
         <h2 className="text-lg font-bold text-slate-800 mb-4 border-b pb-2">
-          Listado de Citas (Semana actual)
+          Listado de Citas ({format(weekDays[0], 'd MMM', { locale: es })} - {format(weekDays[5], 'd MMM yyyy', { locale: es })})
         </h2>
 
         {appointments.length === 0 ? (
