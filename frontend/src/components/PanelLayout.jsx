@@ -1,5 +1,18 @@
 import { Outlet, Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import {
+  LayoutDashboard,
+  Users,
+  PawPrint,
+  Calendar,
+  Stethoscope,
+  Pill,
+  Sparkles,
+  FileText,
+  UserCog,
+  Headphones,
+  MessageSquare,
+} from 'lucide-react';
 import useAuthStore from '../store/authStore';
 import NotificationsPanel from '../modules/notifications/NotificationsPanel';
 
@@ -32,16 +45,17 @@ export default function PanelLayout() {
   };
 
   const menuItems = [
-    { name: 'Dashboard', path: '/', show: true },
-    { name: 'Clientes', path: '/clientes', show: can('clients', 'read') },
-    { name: 'Mascotas', path: '/mascotas', show: can('pets', 'read') },
-    { name: 'Citas', path: '/citas', show: can('appointments', 'read') },
-    { name: 'Consultas', path: '/consultas', show: can('consultations', 'read') },
-    { name: 'Farmacia', path: '/farmacia', show: can('inventory', 'read') },
-    { name: 'Estética', path: '/estetica', show: can('grooming', 'read') },
-    { name: 'Facturación', path: '/facturacion', show: can('invoices', 'read') },
-    { name: 'Personal', path: '/personal', show: can('usuarios', 'ver') },
-    { name: 'Feedback', path: '/feedback', show: true },
+    { name: 'Dashboard', path: '/', show: true, icon: 'dashboard' },
+    { name: 'Clientes', path: '/clientes', show: can('clients', 'read'), icon: 'users' },
+    { name: 'Mascotas', path: '/mascotas', show: can('pets', 'read'), icon: 'paw' },
+    { name: 'Citas', path: '/citas', show: can('appointments', 'read'), icon: 'calendar' },
+    { name: 'Consultas', path: '/consultas', show: can('consultations', 'read'), icon: 'stethoscope' },
+    { name: 'Farmacia', path: '/farmacia', show: can('inventory', 'read'), icon: 'pill' },
+    { name: 'Estética', path: '/estetica', show: can('grooming', 'read'), icon: 'sparkles' },
+    { name: 'Facturación', path: '/facturacion', show: can('invoices', 'read'), icon: 'fileText' },
+    { name: 'Personal', path: '/personal', show: can('usuarios', 'ver'), icon: 'userCog' },
+    { name: 'Soporte', path: '/soporte', show: true, icon: 'headphones' },
+    { name: 'Feedback', path: '/feedback', show: true, icon: 'messageSquare' },
   ];
 
   return (
@@ -72,8 +86,19 @@ export default function PanelLayout() {
                 <Link 
                   to={item.path} 
                   onClick={() => setIsSidebarOpen(false)}
-                  className="block px-4 py-2 hover:bg-slate-700 transition"
+                  className="flex items-center gap-3 px-4 py-2 hover:bg-slate-700 transition"
                 >
+                  {item.icon === 'dashboard' && <LayoutDashboard className="w-4 h-4" />}
+                  {item.icon === 'users' && <Users className="w-4 h-4" />}
+                  {item.icon === 'paw' && <PawPrint className="w-4 h-4" />}
+                  {item.icon === 'calendar' && <Calendar className="w-4 h-4" />}
+                  {item.icon === 'stethoscope' && <Stethoscope className="w-4 h-4" />}
+                  {item.icon === 'pill' && <Pill className="w-4 h-4" />}
+                  {item.icon === 'sparkles' && <Sparkles className="w-4 h-4" />}
+                  {item.icon === 'fileText' && <FileText className="w-4 h-4" />}
+                  {item.icon === 'userCog' && <UserCog className="w-4 h-4" />}
+                  {item.icon === 'headphones' && <Headphones className="w-4 h-4" />}
+                  {item.icon === 'messageSquare' && <MessageSquare className="w-4 h-4" />}
                   {item.name}
                 </Link>
               </li>

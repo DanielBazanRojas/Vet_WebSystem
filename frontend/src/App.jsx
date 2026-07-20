@@ -23,6 +23,7 @@ import InvoiceDetail from './modules/billing/InvoiceDetail';
 import DashboardPage from './modules/dashboard/DashboardPage';
 import StaffPage from './modules/staff/StaffPage';
 import FeedbackPage from './modules/feedback/FeedbackPage';
+import SupportPage from './modules/support/SupportPage';
 
 const queryClient = new QueryClient();
 
@@ -97,6 +98,7 @@ function App() {
 
               {/* Feedback - todos los usuarios staff */}
               <Route path="/feedback" element={<FeedbackPage />} />
+              <Route path="/soporte" element={<SupportPage />} />
             </Route>
           </Route>
         </Routes>
