@@ -152,7 +152,7 @@ export default function BillingPage() {
                       </td>
                       <td className="px-5 py-3 text-right font-bold text-slate-800 block md:table-cell flex justify-between items-center border-b border-gray-100 md:px-6 md:py-4 md:border-b-0">
                         <span className="md:hidden font-semibold text-slate-500">Total:</span>
-                        <span>${parseFloat(inv.total).toFixed(2)}</span>
+                        <span>S/.{parseFloat(inv.total).toFixed(2)}</span>
                       </td>
                       <td className="px-5 py-3 text-center block md:table-cell flex justify-between items-center md:px-6 md:py-4">
                         <span className="md:hidden font-semibold text-slate-500">Estado:</span>

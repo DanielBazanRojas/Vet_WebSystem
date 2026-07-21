@@ -132,7 +132,7 @@ function ProductsTab() {
                     </td>
                     <td className="px-6 py-4 text-right text-sm text-slate-700 font-medium block md:table-cell flex justify-between items-center md:text-right">
                       <span className="md:hidden font-semibold text-slate-500">Precio:</span>
-                      <span>${parseFloat(p.sale_price).toFixed(2)}</span>
+                      <span>S/.{parseFloat(p.sale_price).toFixed(2)}</span>
                     </td>
                     <td className="px-6 py-4 text-center text-sm font-medium block md:table-cell flex justify-between md:justify-center items-center border-t md:border-t-0 pt-2 md:pt-0">
                       <span className="md:hidden font-semibold text-slate-500">Acciones:</span>

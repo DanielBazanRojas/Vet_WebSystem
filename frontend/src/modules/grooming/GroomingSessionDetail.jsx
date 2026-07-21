@@ -144,7 +144,7 @@ export default function GroomingSessionDetail() {
                       </td>
                       <td className="px-6 py-4 text-right font-semibold text-slate-700 block md:table-cell flex justify-between items-center md:text-right">
                         <span className="md:hidden font-semibold text-slate-500">Precio:</span>
-                        <span>${parseFloat(s.price_charged).toFixed(2)}</span>
+                        <span>S/.{parseFloat(s.price_charged).toFixed(2)}</span>
                       </td>
                       <td className="px-6 py-4 text-right w-full md:w-20 block md:table-cell flex justify-between md:justify-end items-center border-t md:border-t-0 pt-2 md:pt-0">
                         <span className="md:hidden font-semibold text-slate-500">Acción:</span>
@@ -163,7 +163,7 @@ export default function GroomingSessionDetail() {
                     </td>
                     <td className="px-6 py-4 text-right font-bold text-slate-900 text-lg block md:table-cell flex justify-between items-center md:text-right">
                       <span className="md:hidden">Monto:</span>
-                      <span>${isCompleted ? parseFloat(session.total_amount).toFixed(2) : currentTotal.toFixed(2)}</span>
+                      <span>S/.{isCompleted ? parseFloat(session.total_amount).toFixed(2) : currentTotal.toFixed(2)}</span>
                     </td>
                     <td className="block md:table-cell"></td>
                   </tr>
@@ -238,7 +238,7 @@ function AddServiceModal({ sessionId, onClose }) {
             >
               <option value="">-- Seleccionar --</option>
               {catalog.map(c => (
-                <option key={c.id} value={c.id}>{c.name} (Base: ${c.base_price})</option>
+                <option key={c.id} value={c.id}>{c.name} (Base: S/.{c.base_price})</option>
               ))}
             </select>
           </div>
