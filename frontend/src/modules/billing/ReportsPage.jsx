@@ -56,7 +56,7 @@ export default function ReportsPage() {
           <div className="p-4 bg-emerald-100 rounded-full text-emerald-600"><DollarSign className="w-8 h-8"/></div>
           <div>
             <p className="text-slate-500 text-sm font-semibold">Total Ingresos</p>
-            <p className="text-2xl font-bold text-slate-800">${totalIngresos.toFixed(2)}</p>
+            <p className="text-2xl font-bold text-slate-800">S/.{totalIngresos.toFixed(2)}</p>
           </div>
         </div>
         <div className="bg-white p-6 rounded-lg shadow-sm border flex items-center gap-4">
@@ -70,7 +70,7 @@ export default function ReportsPage() {
           <div className="p-4 bg-amber-100 rounded-full text-amber-600"><TrendingUp className="w-8 h-8"/></div>
           <div>
             <p className="text-slate-500 text-sm font-semibold">Ticket Diario Promedio</p>
-            <p className="text-2xl font-bold text-slate-800">${ticketPromedio.toFixed(2)}</p>
+            <p className="text-2xl font-bold text-slate-800">S/.{ticketPromedio.toFixed(2)}</p>
           </div>
         </div>
       </div>
@@ -83,7 +83,7 @@ export default function ReportsPage() {
                <BarChart data={chartData}>
                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
                  <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fill: '#64748b'}} />
-                 <YAxis axisLine={false} tickLine={false} tick={{fill: '#64748b'}} tickFormatter={(value) => `$${value}`} />
+                 <YAxis axisLine={false} tickLine={false} tick={{fill: '#64748b'}} tickFormatter={(value) => `S/.${value}`} />
                  <Tooltip cursor={{fill: '#f1f5f9'}} contentStyle={{borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'}} />
                  <Bar dataKey="Ingresos" fill="#3b82f6" radius={[4, 4, 0, 0]} />
                </BarChart>
@@ -100,7 +100,7 @@ export default function ReportsPage() {
                report?.breakdown?.map(item => (
                  <div key={item.item_type} className="flex justify-between items-center border-b pb-2 last:border-0">
                    <span className="capitalize font-medium text-slate-600">{item.item_type.replace('_', ' ')}</span>
-                   <span className="font-bold text-slate-800">${parseFloat(item.total_amount).toFixed(2)}</span>
+                    <span className="font-bold text-slate-800">S/.{parseFloat(item.total_amount).toFixed(2)}</span>
                  </div>
                ))
              )}

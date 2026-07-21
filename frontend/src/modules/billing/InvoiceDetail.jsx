@@ -135,15 +135,15 @@ export default function InvoiceDetail() {
                         </td>
                         <td className="px-4 py-3 text-right block md:table-cell flex justify-between items-center">
                           <span className="md:hidden font-semibold text-slate-500">P. Unit:</span>
-                          <span>${parseFloat(item.unit_price).toFixed(2)}</span>
+                          <span>S/.{parseFloat(item.unit_price).toFixed(2)}</span>
                         </td>
                         <td className="px-4 py-3 text-right text-red-500 block md:table-cell flex justify-between items-center">
                           <span className="md:hidden font-semibold text-slate-500">Desc:</span>
-                          <span>{parseFloat(item.discount) > 0 ? `-$${parseFloat(item.discount).toFixed(2)}` : '-'}</span>
+                          <span>{parseFloat(item.discount) > 0 ? `-S/.${parseFloat(item.discount).toFixed(2)}` : '-'}</span>
                         </td>
                         <td className="px-4 py-3 text-right font-semibold block md:table-cell flex justify-between items-center md:text-right">
                           <span className="md:hidden font-semibold text-slate-500">Subtotal:</span>
-                          <span>${parseFloat(item.subtotal).toFixed(2)}</span>
+                          <span>S/.{parseFloat(item.subtotal).toFixed(2)}</span>
                         </td>
                         {isBorrador && (
                           <td className="px-4 py-3 text-right block md:table-cell flex justify-between md:justify-end items-center border-t md:border-t-0 pt-2 md:pt-0">
@@ -163,15 +163,15 @@ export default function InvoiceDetail() {
               <div className="w-full md:w-64">
                 <div className="flex justify-between text-slate-500">
                   <span>Subtotal:</span>
-                  <span>${parseFloat(invoice.subtotal).toFixed(2)}</span>
+                  <span>S/.{parseFloat(invoice.subtotal).toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-slate-500">
                   <span>Impuestos:</span>
-                  <span>${parseFloat(invoice.tax_amount).toFixed(2)}</span>
+                  <span>S/.{parseFloat(invoice.tax_amount).toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between font-bold text-lg text-slate-800 mt-2 pt-2 border-t">
                   <span>TOTAL:</span>
-                  <span>${parseFloat(invoice.total).toFixed(2)}</span>
+                  <span>S/.{parseFloat(invoice.total).toFixed(2)}</span>
                 </div>
               </div>
             </div>
@@ -218,7 +218,7 @@ export default function InvoiceDetail() {
                          </td>
                          <td className="px-4 py-3 text-right font-bold text-emerald-600 block md:table-cell flex justify-between items-center md:text-right">
                            <span className="md:hidden font-semibold text-slate-500">Monto:</span>
-                           <span>${parseFloat(p.amount).toFixed(2)}</span>
+                            <span>S/.{parseFloat(p.amount).toFixed(2)}</span>
                          </td>
                        </tr>
                      ))
@@ -229,11 +229,11 @@ export default function InvoiceDetail() {
                 <div className="w-full md:w-64">
                    <div className="flex justify-between font-bold text-slate-700">
                       <span>Total Pagado:</span>
-                      <span className="text-emerald-600">${totalPagado.toFixed(2)}</span>
+                       <span className="text-emerald-600">S/.{totalPagado.toFixed(2)}</span>
                    </div>
                    <div className="flex justify-between font-bold text-slate-700 mt-1">
                       <span>Saldo Pendiente:</span>
-                      <span className="text-amber-600">${Math.max(0, saldoPendiente).toFixed(2)}</span>
+                       <span className="text-amber-600">S/.{Math.max(0, saldoPendiente).toFixed(2)}</span>
                    </div>
                 </div>
               </div>
@@ -356,7 +356,7 @@ function AddPaymentModal({ invoiceId, maxAmount, onClose }) {
         <h3 className="font-bold text-lg mb-4 border-b pb-2">Registrar Pago</h3>
         <form onSubmit={handleSubmit} className="space-y-4">
            <div>
-            <label className="block text-sm mb-1">Monto (Máximo: ${maxAmount.toFixed(2)})</label>
+            <label className="block text-sm mb-1">Monto (Máximo: S/.{maxAmount.toFixed(2)})</label>
             <input type="number" max={maxAmount} step="0.01" required value={amount} onChange={e=>setAmount(e.target.value)} className="w-full border p-2 rounded text-lg font-bold text-emerald-600" />
           </div>
           <div>

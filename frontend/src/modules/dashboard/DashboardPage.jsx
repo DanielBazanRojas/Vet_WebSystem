@@ -46,7 +46,7 @@ export default function DashboardPage() {
           <div className="p-4 bg-violet-100 text-violet-600 rounded-full"><DollarSign className="w-6 h-6"/></div>
           <div>
             <p className="text-slate-500 text-sm font-semibold">Ingresos del Mes</p>
-            <p className="text-2xl font-bold text-slate-800">${stats.ingresos_mes.toFixed(2)}</p>
+            <p className="text-2xl font-bold text-slate-800">S/.{stats.ingresos_mes.toFixed(2)}</p>
           </div>
         </div>
 
